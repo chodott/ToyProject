@@ -12,9 +12,9 @@ public class InputManager : MonoBehaviour
 
     public void OnUpdate()
     {
-        if (Input.anyKey == false) return;
 
         if (KeyAction != null)
             KeyAction.Invoke();
+
     }
 }
