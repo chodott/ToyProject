@@ -11,24 +11,20 @@ public class PlayerController : MonoBehaviour
 
     //speed
 
-    private Vector3 aim_dir = Vector3.zero;
+    private Vector3 aimDir  = Vector3.zero;
+    public Vector3 moveDir = Vector3.zero;
     public Rigidbody rigidbody;
 
-    public float CurrentDir;
+    private float Friction = 5.0f;
     public float velocity = 0.0f;
 
-    enum Direction
-    {
-        left = -1, right = 1
-    }
+    public bool isOnGround = false;
+    public LayerMask layer;
 
     private IPlayableState _idleState, _moveState, _turnState;
     private StateContext _stateContext;
     private void Start()
     {
-        GameManager.Input.KeyAction -= OnKeyInput;
-        GameManager.Input.KeyAction += OnKeyInput;
-
         rigidbody = GetComponent<Rigidbody>();
 
         _stateContext = new StateContext(this);
@@ -39,52 +35,64 @@ public class PlayerController : MonoBehaviour
         _stateContext.Transition(_idleState);
     }
 
-    public void OnKeyInput()
-    {
-        if(Input.GetKeyDown(KeyCode.D))
-        {
-            _stateContext.Transition(_moveState);
-        }
-
-        if (Input.GetKeyUp(KeyCode.D))
-        {
-            _stateContext.Transition(_idleState);
-        }
-
-        if (Input.GetKeyDown(KeyCode.A))
-        {
-            _stateContext.Transition(_moveState);
-        }
-
-        if (Input.GetKeyUp(KeyCode.A))
-        {
-            _stateContext.Transition(_idleState);
-        }
-    }
-
-
     public void Update()
     {
-        _stateContext.Update();
-        aim_dir.x = Input.GetAxis("Mouse X");
-        aim_dir.z = Input.GetAxis("Mouse Y");
-        CurrentDir = Input.GetAxis("Horizontal");
-        aim_dir.Normalize();
+        aimDir.x = Input.GetAxis("Mouse X");
+        aimDir.z = Input.GetAxis("Mouse Y");
+        moveDir.x = Input.GetAxis("Horizontal");
+        aimDir.Normalize();
+        moveDir.Normalize();
 
-        if(Input.GetButtonDown("Jump"))
+        _stateContext.Update();
+        CheckOnGround();
+
+        if(Input.GetButtonDown("Jump") && isOnGround)
         {
             rigidbody.AddForce(Vector3.up * 5.0f, ForceMode.VelocityChange);
         }
 
-        _stateContext.Update();
     }
 
     private void FixedUpdate()
     {
-        if(aim_dir != Vector3.zero)
+        if(aimDir != Vector3.zero)
         {
-            transform.forward = Vector3.Lerp(transform.forward, aim_dir, Time.deltaTime * 5.0f);
+            transform.forward = Vector3.Lerp(transform.forward, aimDir, Time.deltaTime * 5.0f);
         }
+
+        if(moveDir != Vector3.zero)
+        {
+            _stateContext.Transition(_moveState);
+        }
+
+        else
+        {
+            _stateContext.Transition(_idleState);
+        }
+    }
+
+    private void CheckOnGround()
+    {
+        RaycastHit hit;
+        if (Physics.Raycast(transform.position + (Vector3.up * 0.2f), Vector3.down, out hit, 0.4f, layer))
+        {
+            isOnGround = true;
+        }
+        else isOnGround = false;
+    }
+
+    public void Decelerate()
+    {
+        int signOfFriction = MathF.Sign(velocity) * -1;
+        velocity += Time.deltaTime * Friction * signOfFriction;
+        velocity = Mathf.Abs(velocity) < 0.2f ? 0.0f : velocity;
+    }
+
+    public void Move()
+    {
+        Vector3 moveVec = Vector3.zero;
+        moveVec.x = velocity;
+        rigidbody.MovePosition(transform.position +  moveVec * Time.deltaTime);
     }
 
 }
