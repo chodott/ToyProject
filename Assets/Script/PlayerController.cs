@@ -11,7 +11,7 @@ public class PlayerController : MonoBehaviour
 
     //speed
 
-    private Vector3 aimDir  = Vector3.zero;
+    public Vector3 aimDir  = Vector3.zero;
     public Vector3 moveDir = Vector3.zero;
     public Rigidbody rigidbody;
 
@@ -33,13 +33,18 @@ public class PlayerController : MonoBehaviour
         _moveState = new MoveState();
 
         _stateContext.Transition(_idleState);
+
+        foreach(var vjs in FindObjectsOfType<VirtualJoystick>()) 
+        {
+            vjs.playerController = this;
+        }
     }
 
     public void Update()
     {
-        aimDir.x = Input.GetAxis("Mouse X");
-        aimDir.z = Input.GetAxis("Mouse Y");
-        moveDir.x = Input.GetAxis("Horizontal");
+        //aimDir.x = Input.GetAxis("Mouse X");
+        //aimDir.z = Input.GetAxis("Mouse Y");
+        //moveDir.x = Input.GetAxis("Horizontal");
         aimDir.Normalize();
         moveDir.Normalize();
 
@@ -95,4 +100,12 @@ public class PlayerController : MonoBehaviour
         rigidbody.MovePosition(transform.position +  moveVec * Time.deltaTime);
     }
 
+    public void Run()
+    {
+        _stateContext.Transition(_moveState);
+    }
+    public void Stop()
+    {
+        _stateContext.Transition(_idleState);
+    }
 }
