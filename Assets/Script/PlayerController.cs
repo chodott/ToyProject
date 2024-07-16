@@ -9,8 +9,6 @@ public class PlayerController : MonoBehaviour
     // Start is called before the first frame update
     public float idle_run_ratio = 0;
 
-    //speed
-
     public Vector3 aimDir  = Vector3.zero;
     public Vector3 moveDir = Vector3.zero;
     public Rigidbody rigidbody;
@@ -48,14 +46,10 @@ public class PlayerController : MonoBehaviour
         aimDir.Normalize();
         moveDir.Normalize();
 
-        _stateContext.Update();
-        CheckOnGround();
-
         if(Input.GetButtonDown("Jump") && isOnGround)
         {
             rigidbody.AddForce(Vector3.up * 5.0f, ForceMode.VelocityChange);
         }
-
     }
 
     private void FixedUpdate()
@@ -74,6 +68,9 @@ public class PlayerController : MonoBehaviour
         {
             _stateContext.Transition(_idleState);
         }
+
+        CheckOnGround();
+        _stateContext.Update();
     }
 
     private void CheckOnGround()
@@ -90,7 +87,7 @@ public class PlayerController : MonoBehaviour
     {
         int signOfFriction = MathF.Sign(velocity) * -1;
         velocity += Time.deltaTime * Friction * signOfFriction;
-        velocity = Mathf.Abs(velocity) < 0.2f ? 0.0f : velocity;
+        velocity = Mathf.Abs(velocity) < 0.05f ? 0.0f : velocity;
     }
 
     public void Move()
@@ -100,12 +97,21 @@ public class PlayerController : MonoBehaviour
         rigidbody.MovePosition(transform.position +  moveVec * Time.deltaTime);
     }
 
-    public void Run()
+    public void Run(Vector2 directionVector)
     {
         _stateContext.Transition(_moveState);
+        moveDir.x = directionVector.x;
     }
     public void Stop()
     {
         _stateContext.Transition(_idleState);
+        moveDir.x = 0;
+    }
+
+
+    public void Turn(Vector2 directionVector)
+    {
+        aimDir.x = directionVector.x;
+        aimDir.z = directionVector.y;
     }
 }

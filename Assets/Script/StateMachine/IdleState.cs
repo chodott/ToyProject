@@ -2,11 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class IdleState : MonoBehaviour, IPlayableState
+public class IdleState : IPlayableState
 {
     private PlayerController _playerController;
-
-    public Vector3 forward_vec = Vector3.zero;
     public void Handle(PlayerController playerController)
     {
         if (_playerController == null) _playerController = playerController;

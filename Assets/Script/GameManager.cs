@@ -22,6 +22,19 @@ public class Singleton<T> : MonoBehaviour where T : Component
             return _instance;
         }
     }
+
+    public virtual void Awake()
+    {
+        if(_instance == null)
+        {
+            _instance = this as T;
+            DontDestroyOnLoad(gameObject);
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+    }
 }
 
 public class GameManager : Singleton<GameManager>

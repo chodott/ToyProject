@@ -3,11 +3,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MoveState : MonoBehaviour, IPlayableState
+public class MoveState : IPlayableState
 {
     private PlayerController _playerController;
-    private float accel = 10.0f;
-    public float MaxSpeed { get; set; } = 5.0f;
+    private float accel = 8.0f;
+    public float MaxSpeed { get; set; } = 3.0f;
 
     public void Handle(PlayerController playerController)
     {

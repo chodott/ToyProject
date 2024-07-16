@@ -3,9 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class StateContext : MonoBehaviour
+public class StateContext
 {
-    // Start is called before the first frame update
 
     public IPlayableState CurrentState{ get; set; }
 
