@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class PlayerController : MonoBehaviour
 {
@@ -12,8 +13,10 @@ public class PlayerController : MonoBehaviour
     public Vector3 aimDir  = Vector3.zero;
     public Vector3 moveDir = Vector3.zero;
     public Rigidbody rigidbody;
+    public Animator animator;
 
     private float Friction = 5.0f;
+    public float MaxSpeed { get; set; } = 3.0f;
     public float velocity = 0.0f;
 
     public bool isOnGround = false;
@@ -30,6 +33,7 @@ public class PlayerController : MonoBehaviour
         _idleState = new IdleState();
         _moveState = new MoveState();
 
+        animator = GetComponent<Animator>();
         _stateContext.Transition(_idleState);
 
         foreach(var vjs in FindObjectsOfType<VirtualJoystick>()) 
@@ -50,14 +54,19 @@ public class PlayerController : MonoBehaviour
         {
             rigidbody.AddForce(Vector3.up * 5.0f, ForceMode.VelocityChange);
         }
+
+        idle_run_ratio = Math.Abs(velocity / MaxSpeed);
+        animator.SetFloat("idle_run_ratio", idle_run_ratio);
+        animator.SetFloat("move_direction", MathF.Sign(transform.forward.x) * MathF.Sign(aimDir.x));
+        print(MathF.Sign(transform.position.x) * MathF.Sign(aimDir.x));
     }
 
     private void FixedUpdate()
     {
-        if(aimDir != Vector3.zero)
-        {
-            transform.forward = Vector3.Lerp(transform.forward, aimDir, Time.deltaTime * 5.0f);
-        }
+        //if(aimDir != Vector3.zero)
+        //{
+        //    transform.forward = Vector3.Lerp(transform.forward, aimDir, Time.deltaTime * 5.0f);
+        //}
 
         if(moveDir != Vector3.zero)
         {
@@ -68,7 +77,6 @@ public class PlayerController : MonoBehaviour
         {
             _stateContext.Transition(_idleState);
         }
-
         CheckOnGround();
         _stateContext.Update();
     }
@@ -81,6 +89,7 @@ public class PlayerController : MonoBehaviour
             isOnGround = true;
         }
         else isOnGround = false;
+        animator.SetBool("OnGround", isOnGround);
     }
 
     public void Decelerate()
@@ -113,5 +122,11 @@ public class PlayerController : MonoBehaviour
     {
         aimDir.x = directionVector.x;
         aimDir.z = directionVector.y;
+
+        Vector3 forwardVector = new Vector3(aimDir.x, 0, 0);
+        forwardVector.Normalize();
+        transform.forward = Vector3.Lerp(transform.forward, forwardVector, 0.5f);
+
+        animator.SetFloat("aim_direction", aimDir.z);
     }
 }
