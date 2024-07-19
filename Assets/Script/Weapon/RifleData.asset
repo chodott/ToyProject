@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6e345041d0915554e9052f4589fc4cb8, type: 3}
+  m_Name: RifleData
+  m_EditorClassIdentifier: 
+  EquipPosition: {x: 0.0692, y: -0.036, z: 0.014}
+  EquipRotation: {x: 0.153, y: 89.795, z: 89.79}
+  range: 100
+  Damage: 5
+  rate: 0
+  num: 1
+  weaponName: Rifle
+  weaponPrefab: {fileID: 6948081837284883828, guid: fc64f4d389b4132439f5e5c23ab5d9a2,
+    type: 3}

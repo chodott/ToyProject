@@ -24,6 +24,8 @@ public class PlayerController : MonoBehaviour
 
     private IPlayableState _idleState, _moveState, _turnState;
     private StateContext _stateContext;
+
+    private Transform weaponEquipTransform;
     private void Start()
     {
         rigidbody = GetComponent<Rigidbody>();
@@ -40,6 +42,9 @@ public class PlayerController : MonoBehaviour
         {
             vjs.playerController = this;
         }
+
+        //Search Weapon Equip Object
+        weaponEquipTransform =  ReturnEquipTransform(transform);
     }
 
     public void Update()
@@ -58,7 +63,6 @@ public class PlayerController : MonoBehaviour
         idle_run_ratio = Math.Abs(velocity / MaxSpeed);
         animator.SetFloat("idle_run_ratio", idle_run_ratio);
         animator.SetFloat("move_direction", MathF.Sign(transform.forward.x) * MathF.Sign(aimDir.x));
-        print(MathF.Sign(transform.position.x) * MathF.Sign(aimDir.x));
     }
 
     private void FixedUpdate()
@@ -128,5 +132,24 @@ public class PlayerController : MonoBehaviour
         transform.forward = Vector3.Lerp(transform.forward, forwardVector, 0.5f);
 
         animator.SetFloat("aim_direction", aimDir.z);
+    }
+
+    public void EquipWeapon(GameObject equippedWeapon)
+    {
+        Weapon weapon= equippedWeapon.GetComponent<Weapon>();
+        weapon.Equipped(weaponEquipTransform);
+        animator.SetInteger("EquippedType", weapon.Data.num);
+    }
+
+    private Transform ReturnEquipTransform(Transform parentTransform)
+    {
+        if (parentTransform.name == "hand_r") return parentTransform;
+        Transform foundTransform;
+        foreach (Transform childTransform in parentTransform)
+        {
+            foundTransform = ReturnEquipTransform(childTransform);
+            if (foundTransform != null) return foundTransform;
+        }
+        return null;
     }
 }
