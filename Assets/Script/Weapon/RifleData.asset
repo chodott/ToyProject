@@ -16,8 +16,11 @@ MonoBehaviour:
   EquipRotation: {x: 0.153, y: 89.795, z: 89.79}
   range: 100
   Damage: 5
-  rate: 0
+  rate: 0.1
+  MaxBulletCnt: 30
   num: 1
   weaponName: Rifle
   weaponPrefab: {fileID: 6948081837284883828, guid: fc64f4d389b4132439f5e5c23ab5d9a2,
+    type: 3}
+  projectilePrefab: {fileID: 1795072395756124, guid: 43b2b63c508979840ac05b3dd011c1a3,
     type: 3}

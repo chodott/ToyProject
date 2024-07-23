@@ -26,9 +26,14 @@ public class PlayerController : MonoBehaviour
     private StateContext _stateContext;
 
     private Transform weaponEquipTransform;
+    private Weapon equippedWeapon;
+
+    private StatManager _statManager;
     private void Start()
     {
         rigidbody = GetComponent<Rigidbody>();
+        _statManager = GetComponent<StatManager>(); 
+        _statManager.Die.AddListener(Respawn);
 
         _stateContext = new StateContext(this);
 
@@ -67,11 +72,6 @@ public class PlayerController : MonoBehaviour
 
     private void FixedUpdate()
     {
-        //if(aimDir != Vector3.zero)
-        //{
-        //    transform.forward = Vector3.Lerp(transform.forward, aimDir, Time.deltaTime * 5.0f);
-        //}
-
         if(moveDir != Vector3.zero)
         {
             _stateContext.Transition(_moveState);
@@ -130,15 +130,15 @@ public class PlayerController : MonoBehaviour
         Vector3 forwardVector = new Vector3(aimDir.x, 0, 0);
         forwardVector.Normalize();
         transform.forward = Vector3.Lerp(transform.forward, forwardVector, 0.5f);
-
+        Fire();
         animator.SetFloat("aim_direction", aimDir.z);
     }
 
-    public void EquipWeapon(GameObject equippedWeapon)
+    public void EquipWeapon(GameObject weapon)
     {
-        Weapon weapon= equippedWeapon.GetComponent<Weapon>();
-        weapon.Equipped(weaponEquipTransform);
-        animator.SetInteger("EquippedType", weapon.Data.num);
+        equippedWeapon = weapon.GetComponent<Weapon>();
+        equippedWeapon.Equipped(weaponEquipTransform);
+        animator.SetInteger("EquippedType", equippedWeapon.Data.num);
     }
 
     private Transform ReturnEquipTransform(Transform parentTransform)
@@ -151,5 +151,16 @@ public class PlayerController : MonoBehaviour
             if (foundTransform != null) return foundTransform;
         }
         return null;
+    }
+
+    private void Fire()
+    {
+        if (equippedWeapon == null) return;
+        equippedWeapon.Shoot();
+    }
+
+    public void Respawn()
+    {
+        transform.position = new Vector3(0, 10.0f, 0);
     }
 }

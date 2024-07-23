@@ -22,10 +22,14 @@ public class SOWeapon : ScriptableObject
     [SerializeField]
     public float rate;
 
+    [Range(0, 100)]
+    [SerializeField]
+    public int MaxBulletCnt;
+
     [Range(0, 10)]
     [SerializeField]
     public int num;
     public string weaponName;
     public GameObject weaponPrefab;
-
+    public GameObject projectilePrefab;
 }
