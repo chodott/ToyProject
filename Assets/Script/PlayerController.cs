@@ -32,6 +32,8 @@ public class PlayerController : MonoBehaviour
     private void Start()
     {
         rigidbody = GetComponent<Rigidbody>();
+        rigidbody.freezeRotation = true;
+
         _statManager = GetComponent<StatManager>(); 
         _statManager.Die.AddListener(Respawn);
 
