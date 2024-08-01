@@ -4,13 +4,13 @@ using UnityEngine;
 
 public class Bullet : MonoBehaviour
 {
-    public float damage;
+    public float Damage;
     protected virtual void OnCollisionEnter(Collision collision)
     {
         StatManager otherStat = collision.transform.GetComponent<StatManager>();
         if(otherStat != null )
         {
-            otherStat.TakeDamage(damage);
+            otherStat.TakeDamage(Damage);
             Destroy(gameObject);
         }
     }

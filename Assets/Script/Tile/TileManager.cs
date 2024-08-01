@@ -4,16 +4,16 @@ using UnityEngine;
 
 public class TileManager : MonoBehaviour
 {
-   private Dictionary<int, NormalTile> tileDictionary = new Dictionary<int, NormalTile>();
+   private Dictionary<int, NormalTile> _tileDictionary = new Dictionary<int, NormalTile>();
     [SerializeField]
-    private float coolTime = 5.0f;
-    private bool isReady = true;
+    private float _coolTime = 5.0f;
+    private bool _isReady = true;
 
     
     [SerializeField]
-    private GameObject boxPrefab;
+    private GameObject _boxPrefab;
     [SerializeField]
-    private SpawnWeaponTable spawnWeaponTable;
+    private SpawnWeaponTable _spawnWeaponTable;
 
     private void Start()
     {
@@ -21,7 +21,7 @@ public class TileManager : MonoBehaviour
         foreach(NormalTile tile in FindObjectsOfType<NormalTile>())
         {
             float tilePosZ = tile.transform.position.z;
-            if (Mathf.Abs(tilePosZ) <= 0.2f) tileDictionary.Add(++num, tile);
+            if (Mathf.Abs(tilePosZ) <= 0.2f) _tileDictionary.Add(++num, tile);
             else tile.GetComponent<BoxCollider>().enabled = false;
         }
     }
@@ -32,22 +32,22 @@ public class TileManager : MonoBehaviour
 
     IEnumerator Respawn()
     {
-        yield return new WaitForSeconds(coolTime);
-        isReady = true;
+        yield return new WaitForSeconds(_coolTime);
+        _isReady = true;
     }
 
     private void SpawnItemBox()
     {
-        if (isReady == false) return;
+        if (_isReady == false) return;
 
-        int randomIndex = Random.Range(0, tileDictionary.Count);
-        Vector3 spawnPos = tileDictionary[randomIndex].transform.position;
+        int randomIndex = Random.Range(0, _tileDictionary.Count);
+        Vector3 spawnPos = _tileDictionary[randomIndex].transform.position;
         spawnPos.y += 1.0f;
 
-        GameObject SpawnedBox = Instantiate(boxPrefab, spawnPos, Quaternion.identity);
-        SpawnedBox.GetComponent<WeaponBox>().Data = spawnWeaponTable.GetRandomWeapon();
+        GameObject SpawnedBox = Instantiate(_boxPrefab, spawnPos, Quaternion.identity);
+        SpawnedBox.GetComponent<WeaponBox>().Data = _spawnWeaponTable.GetRandomWeapon();
 
-        isReady = false;
+        _isReady = false;
         StartCoroutine(Respawn());
     }
 

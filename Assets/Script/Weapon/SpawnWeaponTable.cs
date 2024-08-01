@@ -11,11 +11,12 @@ public class SpawnWeaponTable : ScriptableObject
         public SOWeapon weapon;
     }
 
-    public List<Weapon> weapons = new List<Weapon>(); 
+    [SerializeField]
+    private List<Weapon> Weapons = new(); 
 
     public SOWeapon GetRandomWeapon()
     {
-        int index = Random.Range(0, weapons.Count);
-        return weapons[index].weapon;
+        int index = Random.Range(0, Weapons.Count);
+        return Weapons[index].weapon;
     }
 }

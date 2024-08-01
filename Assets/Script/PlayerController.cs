@@ -8,31 +8,32 @@ using UnityEngine.UIElements;
 public class PlayerController : MonoBehaviour
 {
     // Start is called before the first frame update
-    public float idle_run_ratio = 0;
+    public float Idle_run_ratio = 0;
 
-    public Vector3 aimDir  = Vector3.zero;
-    public Vector3 moveDir = Vector3.zero;
-    public Rigidbody rigidbody;
-    public Animator animator;
+    public Vector3 AimDir  = Vector3.zero;
+    public Vector3 MoveDir = Vector3.zero;
+    public Rigidbody _rigidbody;
+    public Animator _animator;
 
-    private float Friction = 5.0f;
+    [SerializeField]
+    private float _friction = 5.0f;
     public float MaxSpeed { get; set; } = 3.0f;
-    public float velocity = 0.0f;
+    public float Velocity = 0.0f;
 
-    public bool isOnGround = false;
-    public LayerMask layer;
+    public bool IsOnGround = false;
+    public LayerMask Layer;
 
-    private IPlayableState _idleState, _moveState, _turnState;
+    private IPlayableState _idleState, _moveState;
     private StateContext _stateContext;
 
-    private Transform weaponEquipTransform;
-    private Weapon equippedWeapon;
+    private Transform _weaponEquipTransform;
+    private Weapon _equippedWeapon;
 
     private StatManager _statManager;
     private void Start()
     {
-        rigidbody = GetComponent<Rigidbody>();
-        rigidbody.freezeRotation = true;
+        _rigidbody = GetComponent<Rigidbody>();
+        _rigidbody.freezeRotation = true;
 
         _statManager = GetComponent<StatManager>(); 
         _statManager.Die.AddListener(Respawn);
@@ -42,7 +43,7 @@ public class PlayerController : MonoBehaviour
         _idleState = new IdleState();
         _moveState = new MoveState();
 
-        animator = GetComponent<Animator>();
+        _animator = GetComponent<Animator>();
         _stateContext.Transition(_idleState);
 
         foreach(var vjs in FindObjectsOfType<VirtualJoystick>()) 
@@ -51,30 +52,27 @@ public class PlayerController : MonoBehaviour
         }
 
         //Search Weapon Equip Object
-        weaponEquipTransform =  ReturnEquipTransform(transform);
+        _weaponEquipTransform =  ReturnEquipTransform(transform);
     }
 
     public void Update()
     {
-        //aimDir.x = Input.GetAxis("Mouse X");
-        //aimDir.z = Input.GetAxis("Mouse Y");
-        //moveDir.x = Input.GetAxis("Horizontal");
-        aimDir.Normalize();
-        moveDir.Normalize();
+        AimDir.Normalize();
+        MoveDir.Normalize();
 
-        if(Input.GetButtonDown("Jump") && isOnGround)
+        if(Input.GetButtonDown("Jump") && IsOnGround)
         {
-            rigidbody.AddForce(Vector3.up * 5.0f, ForceMode.VelocityChange);
+            _rigidbody.AddForce(Vector3.up * 5.0f, ForceMode.VelocityChange);
         }
 
-        idle_run_ratio = Math.Abs(velocity / MaxSpeed);
-        animator.SetFloat("idle_run_ratio", idle_run_ratio);
-        animator.SetFloat("move_direction", MathF.Sign(transform.forward.x) * MathF.Sign(aimDir.x));
+        Idle_run_ratio = Math.Abs(Velocity / MaxSpeed);
+        _animator.SetFloat("idle_run_ratio", Idle_run_ratio);
+        _animator.SetFloat("move_direction", MathF.Sign(transform.forward.x) * MathF.Sign(AimDir.x));
     }
 
     private void FixedUpdate()
     {
-        if(moveDir != Vector3.zero)
+        if(MoveDir != Vector3.zero)
         {
             _stateContext.Transition(_moveState);
         }
@@ -90,57 +88,59 @@ public class PlayerController : MonoBehaviour
     private void CheckOnGround()
     {
         RaycastHit hit;
-        if (Physics.Raycast(transform.position + (Vector3.up * 0.2f), Vector3.down, out hit, 0.4f, layer))
+        if (Physics.Raycast(transform.position + (Vector3.up * 0.2f), Vector3.down, out hit, 0.4f, Layer))
         {
-            isOnGround = true;
+            IsOnGround = true;
         }
-        else isOnGround = false;
-        animator.SetBool("OnGround", isOnGround);
+        else IsOnGround = false;
+        _animator.SetBool("OnGround", IsOnGround);
     }
 
     public void Decelerate()
     {
-        int signOfFriction = MathF.Sign(velocity) * -1;
-        velocity += Time.deltaTime * Friction * signOfFriction;
-        velocity = Mathf.Abs(velocity) < 0.05f ? 0.0f : velocity;
+        int signOfFriction = MathF.Sign(Velocity) * -1;
+        Velocity += Time.deltaTime * _friction * signOfFriction;
+        Velocity = Mathf.Abs(Velocity) < 0.05f ? 0.0f : Velocity;
     }
 
     public void Move()
     {
         Vector3 moveVec = Vector3.zero;
-        moveVec.x = velocity;
-        rigidbody.MovePosition(transform.position +  moveVec * Time.deltaTime);
+        moveVec.x = Velocity;
+        GetComponent<Rigidbody>().MovePosition(transform.position +  moveVec * Time.deltaTime);
     }
 
     public void Run(Vector2 directionVector)
     {
         _stateContext.Transition(_moveState);
-        moveDir.x = directionVector.x;
+        MoveDir.x = directionVector.x;
     }
     public void Stop()
     {
         _stateContext.Transition(_idleState);
-        moveDir.x = 0;
+        MoveDir.x = 0;
     }
 
 
     public void Turn(Vector2 directionVector)
     {
-        aimDir.x = directionVector.x;
-        aimDir.z = directionVector.y;
+        AimDir.x = directionVector.x;
+        AimDir.z = directionVector.y;
 
-        Vector3 forwardVector = new Vector3(aimDir.x, 0, 0);
+        Vector3 forwardVector = new (AimDir.x, 0, 0);
         forwardVector.Normalize();
         transform.forward = Vector3.Lerp(transform.forward, forwardVector, 0.5f);
         Fire();
-        animator.SetFloat("aim_direction", aimDir.z);
+        _animator.SetFloat("aim_direction", AimDir.z);
     }
 
     public void EquipWeapon(GameObject weapon)
     {
-        equippedWeapon = weapon.GetComponent<Weapon>();
-        equippedWeapon.Equipped(weaponEquipTransform);
-        animator.SetInteger("EquippedType", equippedWeapon.Data.num);
+        if(_equippedWeapon != null) Destroy(_equippedWeapon);
+
+        _equippedWeapon = weapon.GetComponent<Weapon>();
+        _equippedWeapon.Equipped(_weaponEquipTransform);
+        _animator.SetInteger("EquippedType", _equippedWeapon.Data.Num);
     }
 
     private Transform ReturnEquipTransform(Transform parentTransform)
@@ -157,8 +157,8 @@ public class PlayerController : MonoBehaviour
 
     private void Fire()
     {
-        if (equippedWeapon == null) return;
-        equippedWeapon.Shoot();
+        if (_equippedWeapon == null) return;
+        _equippedWeapon.Shoot();
     }
 
     public void Respawn()

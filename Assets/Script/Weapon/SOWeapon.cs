@@ -12,7 +12,7 @@ public class SOWeapon : ScriptableObject
 
     [Range(0, 100)]
     [SerializeField]
-    public float range;
+    public float Range;
 
     [Range(0, 100)]
     [SerializeField]
@@ -20,7 +20,7 @@ public class SOWeapon : ScriptableObject
 
     [Range(0, 50)]
     [SerializeField]
-    public float rate;
+    public float Rate;
 
     [Range(0, 100)]
     [SerializeField]
@@ -28,8 +28,8 @@ public class SOWeapon : ScriptableObject
 
     [Range(0, 10)]
     [SerializeField]
-    public int num;
-    public string weaponName;
-    public GameObject weaponPrefab;
-    public GameObject projectilePrefab;
+    public int Num;
+    public string WeaponName;
+    public GameObject WeaponPrefab;
+    public GameObject ProjectilePrefab;
 }

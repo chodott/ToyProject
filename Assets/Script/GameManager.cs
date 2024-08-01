@@ -5,7 +5,7 @@ using UnityEngine;
 public class Singleton<T> : MonoBehaviour where T : Component
 {
     private static T _instance;
-    public static T instance
+    public static T Instance
     {
         get
         {
@@ -40,7 +40,7 @@ public class Singleton<T> : MonoBehaviour where T : Component
 public class GameManager : Singleton<GameManager>
 {
     InputManager _input = new InputManager();
-    public static InputManager Input { get { return instance._input; } }
+    public static InputManager Input { get { return Instance._input; } }
 
     void Start()
     {

@@ -6,7 +6,7 @@ using UnityEngine;
 public class MoveState : IPlayableState
 {
     private PlayerController _playerController;
-    private float accel = 8.0f;
+    private float _accel = 8.0f;
 
     public void Handle(PlayerController playerController)
     {
@@ -21,9 +21,9 @@ public class MoveState : IPlayableState
 
         _playerController.Decelerate();
 
-        _playerController.velocity += _playerController.moveDir.x * accel * Time.deltaTime;
-        _playerController.velocity = MathF.Abs(_playerController.velocity) > _playerController.MaxSpeed ?
-           _playerController.MaxSpeed * _playerController.moveDir.x : _playerController.velocity;
+        _playerController.Velocity += _playerController.MoveDir.x * _accel * Time.deltaTime;
+        _playerController.Velocity = MathF.Abs(_playerController.Velocity) > _playerController.MaxSpeed ?
+            _playerController.MaxSpeed * _playerController.MoveDir.x : _playerController.Velocity;
 
         _playerController.Move();
     }
