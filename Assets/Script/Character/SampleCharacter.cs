@@ -11,6 +11,7 @@ public class SampleCharacter : MonoBehaviour
     [SerializeField]
     private Camera _selfCamera;
     private int _formCount;
+    private bool _isReady = false;
 
     private void Start()
     {
@@ -18,6 +19,8 @@ public class SampleCharacter : MonoBehaviour
     }
     public void ChangeForm(int num)
     {
+        if (_isReady) return;
+
         if(_curBody != null)
         {
             _curBody.SetActive(false);

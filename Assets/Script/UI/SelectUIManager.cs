@@ -1,39 +1,75 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.UIElements;
+using static UnityEditor.ShaderGraph.Internal.KeywordDependentCollection;
+
 public class SelectUIManager : MonoBehaviour
 {
     [SerializeField]
     private List<SOSelectCharacter> _selectCharacterList = new();
     [SerializeField]
     private GameObject _selectUIPrefab;
+
+
     [SerializeField]
-    private GameObject _sampleCharacterPrefab;
-    private float _gap = 100.0f;
+    private GameObject _player1View;
     [SerializeField]
-    private Vector3 _characterPosition;
-    private GameObject _character;
-    private GameObject _characterView;
+    private GameObject _player2View;
+    [SerializeField]
+    private int _length = 3;
+    [SerializeField]
+    private float _limitTime = 60.0f;
+    public float LimitTime
+    {
+        get { return _limitTime; }
+    }
+    private float _gap = 120.0f;
+
+
+    private static SelectUIManager _selectUIManager;
+    public static SelectUIManager UIManager
+    {
+        get
+        {
+            if (_selectUIManager == null) _selectUIManager = FindObjectOfType<SelectUIManager>();
+            return _selectUIManager;
+        }
+    }
 
     private void Start()
     {
-        _character = Instantiate(_sampleCharacterPrefab, _characterPosition, Quaternion.identity);
-        _characterView = new GameObject("RawImage");
-        _character.GetComponent<SampleCharacter>().SetRenderTexture(_characterView.AddComponent<RawImage>());
-        _characterView.transform.SetParent(transform, false);
-        _characterView.GetComponent<RawImage>().rectTransform.localScale *= 2;
-
-        for(int i=0; i<_selectCharacterList.Count; ++i) 
+        for (int i = 0; i < _selectCharacterList.Count; ++i)
         {
             //Create Select Character UI 
             GameObject selectUI = Instantiate(_selectUIPrefab);
             selectUI.transform.SetParent(gameObject.transform, false);
-            selectUI.GetComponent<SelectUI>().SetData(_selectCharacterList[i], _character.GetComponent<SampleCharacter>());
+            selectUI.GetComponent<SelectUI>().SetData(_selectCharacterList[i], _player1View.GetComponent<SampleViewUI>(), _player2View.GetComponent<SampleViewUI>());
             RectTransform rt = selectUI.GetComponent<RectTransform>();
-            rt.anchoredPosition = new(_gap * i, 0); 
+
+            int column = i % _length;
+            int row = i / _length;
+            rt.anchoredPosition = new(-_gap + column * _gap, -row * _gap);
         }
     }
 
+    public void CheckReady()
+    {
+
+    }
+
+    public void MoveBattleScene()
+    {
+    }
+
+    private void Update()
+    {
+        _limitTime -= Time.deltaTime;
+        if(_limitTime < 0 ) 
+        {
+            MoveBattleScene();
+        }
+    }
 }
