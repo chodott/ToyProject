@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using UnityEngine.UIElements;
 using static UnityEditor.ShaderGraph.Internal.KeywordDependentCollection;
@@ -12,7 +13,6 @@ public class SelectUIManager : MonoBehaviour
     private List<SOSelectCharacter> _selectCharacterList = new();
     [SerializeField]
     private GameObject _selectUIPrefab;
-
 
     [SerializeField]
     private GameObject _player1View;
@@ -55,13 +55,16 @@ public class SelectUIManager : MonoBehaviour
         }
     }
 
-    public void CheckReady()
+    public void CheckReady(int characterNumber)
     {
-
+        GameManager.Instance.Data = new PlayerData(0, characterNumber);
+        MoveBattleScene();
     }
 
     public void MoveBattleScene()
     {
+        
+        SceneManager.LoadScene("JungleScene");
     }
 
     private void Update()

@@ -12,6 +12,7 @@ public class SampleViewUI : MonoBehaviour
     [SerializeField]
     private Vector3 _characterPosition;
     private GameObject _character;
+    private int _characterNumber;
 
     [SerializeField]
     private Button _readyButton;
@@ -29,10 +30,12 @@ public class SampleViewUI : MonoBehaviour
     private void Ready()
     {
         _isReady = _isReady ? false : true;
+        if (_isReady == true) SelectUIManager.UIManager.CheckReady(_characterNumber);
     }
     public void ChangeCharacter(int characterNumber)
     {
         if (_isReady) return;
+        _characterNumber = characterNumber;
         _character.GetComponent<SampleCharacter>().ChangeForm(characterNumber);
     }
 }

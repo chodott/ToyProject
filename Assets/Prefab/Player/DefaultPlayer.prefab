@@ -178,7 +178,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1929439550657973868
 Transform:
   m_ObjectHideFlags: 0
@@ -335,7 +335,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &7043614313083784438
 Transform:
   m_ObjectHideFlags: 0
@@ -1199,7 +1199,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &4701306170702432570
 Transform:
   m_ObjectHideFlags: 0
@@ -1931,7 +1931,7 @@ Animator:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8599115350366115150}
   m_Enabled: 1
-  m_Avatar: {fileID: 9000000, guid: 39cfef0e5c108fd4bb60957d76c69a75, type: 3}
+  m_Avatar: {fileID: 9000000, guid: 7a0360f9a8a09417c979f45d636abe2b, type: 3}
   m_Controller: {fileID: 9100000, guid: 9c7873c56bacbd34b85e49b195598b36, type: 2}
   m_CullingMode: 1
   m_UpdateMode: 0
@@ -1955,16 +1955,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2fb0d5a1fbabdd04e8805a644cba79d9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  idle_run_ratio: 0
-  aimDir: {x: 0, y: 0, z: 0}
-  moveDir: {x: 0, y: 0, z: 0}
-  rigidbody: {fileID: 0}
-  animator: {fileID: 0}
-  velocity: 0
-  isOnGround: 0
-  layer:
+  Idle_run_ratio: 0
+  AimDir: {x: 0, y: 0, z: 0}
+  MoveDir: {x: 0, y: 0, z: 0}
+  _friction: 5
+  Velocity: 0
+  IsOnGround: 0
+  Layer:
     serializedVersion: 2
-    m_Bits: 1
+    m_Bits: 0
 --- !u!54 &8252149952752702915
 Rigidbody:
   m_ObjectHideFlags: 0

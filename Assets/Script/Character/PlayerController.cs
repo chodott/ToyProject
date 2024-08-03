@@ -12,10 +12,15 @@ public class PlayerController : MonoBehaviour
 
     public Vector3 AimDir  = Vector3.zero;
     public Vector3 MoveDir = Vector3.zero;
-    public Rigidbody _rigidbody;
-    public Animator _animator;
+    private Rigidbody _rigidbody;
+    private Animator _animator;
 
-    [SerializeField]
+    //Form
+    private GameObject _curBody;
+    private GameObject _curHead;
+    private int _formCount = 20;
+
+   [SerializeField]
     private float _friction = 5.0f;
     public float MaxSpeed { get; set; } = 3.0f;
     public float Velocity = 0.0f;
@@ -164,5 +169,19 @@ public class PlayerController : MonoBehaviour
     public void Respawn()
     {
         transform.position = new Vector3(0, 10.0f, 0);
+    }
+
+    public void ChangeForm(int num)
+    {
+        if (_curBody != null)
+        {
+            _curBody.SetActive(false);
+            _curHead.SetActive(false);
+        }
+
+        _curBody = transform.GetChild(num).gameObject;
+        _curHead = transform.GetChild(num + _formCount).gameObject;
+        _curBody.SetActive(true);
+        _curHead.SetActive(true);
     }
 }

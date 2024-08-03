@@ -11,4 +11,6 @@ public class SOSelectCharacter : ScriptableObject
     [SerializeField]
     [Range(0, 20)]
     public int Number;
+    [SerializeField]
+    public GameObject CharacterPrefab;
 }
