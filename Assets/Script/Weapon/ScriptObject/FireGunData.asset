@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6e345041d0915554e9052f4589fc4cb8, type: 3}
+  m_Name: FireGunData
+  m_EditorClassIdentifier: 
+  EquipPosition: {x: 0.062, y: -0.032, z: -0.004}
+  EquipRotation: {x: 0.153, y: 89.795, z: 89.79}
+  Range: 0
+  Damage: 3
+  Rate: 0
+  MaxBulletCnt: 0
+  Num: 0
+  WeaponName: FireGun
+  WeaponPrefab: {fileID: 4982128866425352390, guid: 77c66d64e7d1a8b458934029d50fcbf1,
+    type: 3}
+  ProjectilePrefab: {fileID: 1254724754748870, guid: ead2eb1ec6d8ee54fa5d36c7f5e30eef,
+    type: 3}

@@ -7,25 +7,22 @@ using UnityEngine.PlayerLoop;
 public class WeaponBox : MonoBehaviour
 {
     [SerializeField]
-    private SOWeapon weaponData;
-    private GameObject weapon;
+    private SOWeapon _weaponData;
+    private GameObject _weapon;
 
     public SOWeapon Data
     {
-        get { return weaponData; }
-        set 
-        { 
-            weaponData = value;
-        }
+        get { return _weaponData; }
+        set { _weaponData = value;}
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.tag != "Player") return;
+        if (other.tag.Equals("Player")) return;
 
-        weapon = Instantiate(weaponData.weaponPrefab);
-        weapon.GetComponent<Weapon>().Data = weaponData;
-        other.transform.parent.GetComponent<PlayerController>().EquipWeapon(weapon);
+        _weapon = Instantiate(_weaponData.WeaponPrefab);
+        _weapon.GetComponent<Weapon>().Data = _weaponData;
+        other.transform.parent.GetComponent<PlayerController>().EquipWeapon(_weapon);
         Destroy(gameObject);
     }
 }

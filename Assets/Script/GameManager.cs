@@ -72,6 +72,7 @@ public class GameManager : Singleton<GameManager>
     {
         GameObject character = (GameObject) Instantiate(_characterPrefab, SceneManager.GetActiveScene());
         character.GetComponent<PlayerController>().ChangeForm(_playerData.CharacterNumber);
+        character.transform.position = new Vector3(2.0f, 2.0f, 0.0f);
     }
 
     void OnSceneLoad(Scene scene, LoadSceneMode loadSceneMode)
