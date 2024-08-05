@@ -12,13 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6e345041d0915554e9052f4589fc4cb8, type: 3}
   m_Name: AcidGun
   m_EditorClassIdentifier: 
-  EquipPosition: {x: 0.062, y: -0.032, z: -0.004}
+  EquipPosition: {x: 0.0692, y: -0.036, z: 0.014}
   EquipRotation: {x: 0.153, y: 89.795, z: 89.79}
   Range: 0
-  Damage: 3
-  Rate: 0
-  MaxBulletCnt: 0
-  Num: 0
+  Damage: 1
+  Rate: 1
+  MaxBulletCnt: 5
+  Num: 4
   WeaponName: AcidGun
   WeaponPrefab: {fileID: 3506613558083865358, guid: ce5dc50b63174014f92200f39ed282d1,
     type: 3}

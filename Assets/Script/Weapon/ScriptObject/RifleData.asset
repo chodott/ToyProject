@@ -18,7 +18,7 @@ MonoBehaviour:
   Damage: 5
   Rate: 0
   MaxBulletCnt: 30
-  Num: 0
+  Num: 1
   WeaponName: Rifle
   WeaponPrefab: {fileID: 7775909171458005017, guid: 26c304c542935a646a21dd134e1c2cea,
     type: 3}

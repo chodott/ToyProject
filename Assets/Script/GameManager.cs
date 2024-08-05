@@ -40,9 +40,6 @@ public class Singleton<T> : MonoBehaviour where T : Component
 
 public class GameManager : Singleton<GameManager>
 {
-    InputManager _input = new InputManager();
-    public static InputManager Input { get { return Instance._input; } }
-
     private PlayerData _playerData = new PlayerData();
     public PlayerData Data { get { return _playerData; } set { _playerData = value; } }
 
@@ -56,11 +53,6 @@ public class GameManager : Singleton<GameManager>
         sceneChangeActions.Add("JungleScene", LoadBattleScene);
 
         SceneManager.sceneLoaded += OnSceneLoad;
-    }
-
-    void Update()
-    {
-        _input.OnUpdate();
     }
 
     void LoadSelectScene()

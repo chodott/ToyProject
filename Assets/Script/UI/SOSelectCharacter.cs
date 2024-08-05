@@ -7,10 +7,8 @@ using UnityEngine.UIElements;
 public class SOSelectCharacter : ScriptableObject
 {
     [SerializeField]
-    public Image Thumbnail;
+    public Sprite Thumbnail;
     [SerializeField]
     [Range(0, 20)]
     public int Number;
-    [SerializeField]
-    public GameObject CharacterPrefab;
 }

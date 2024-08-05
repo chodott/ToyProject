@@ -17,7 +17,7 @@ MonoBehaviour:
   Range: 0
   Damage: 3
   Rate: 0
-  MaxBulletCnt: 0
+  MaxBulletCnt: 30
   Num: 0
   WeaponName: Pistol
   WeaponPrefab: {fileID: 3823321262691816068, guid: 226c568e48d1bbc45a3110f8660d2e2c,

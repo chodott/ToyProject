@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Weapon : MonoBehaviour
 {
+    [SerializeField]
     private SOWeapon _weaponData;
     private int _bulletCnt = 0;
     public SOWeapon Data

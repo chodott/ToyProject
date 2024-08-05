@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 135219337407746228}
   - component: {fileID: 108919900232066054}
   - component: {fileID: 2890918712455213658}
+  - component: {fileID: -8612079303703292532}
   m_Layer: 0
   m_Name: FireBullet
   m_TagString: Untagged
@@ -196,6 +197,19 @@ MonoBehaviour:
   m_LightCookieSize: {x: 1, y: 1}
   m_LightCookieOffset: {x: 0, y: 0}
   m_SoftShadowQuality: 0
+--- !u!114 &-8612079303703292532
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1254724754748870}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fd76bfb2c853366459f0f32b1dfe94fd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Damage: 0
 --- !u!1 &1800544799133088
 GameObject:
   m_ObjectHideFlags: 0

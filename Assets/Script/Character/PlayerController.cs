@@ -26,11 +26,14 @@ public class PlayerController : MonoBehaviour
     public float Velocity = 0.0f;
 
     public bool IsOnGround = false;
-    public LayerMask Layer;
+    public LayerMask _layer = 1 << 0;     //Default
 
     private IPlayableState _idleState, _moveState;
     private StateContext _stateContext;
 
+    //Weapon
+    [SerializeField]
+    private GameObject _defaultWeaponPrefab;
     private Transform _weaponEquipTransform;
     private Weapon _equippedWeapon;
 
@@ -51,24 +54,15 @@ public class PlayerController : MonoBehaviour
         _animator = GetComponent<Animator>();
         _stateContext.Transition(_idleState);
 
-        foreach(var vjs in FindObjectsOfType<VirtualJoystick>()) 
-        {
-            vjs.playerController = this;
-        }
-
         //Search Weapon Equip Object
-        _weaponEquipTransform =  ReturnEquipTransform(transform);
+        _weaponEquipTransform = ReturnEquipTransform(transform);
+        EquipWeapon(Instantiate(_defaultWeaponPrefab, _weaponEquipTransform));
     }
 
     public void Update()
     {
         AimDir.Normalize();
         MoveDir.Normalize();
-
-        if(Input.GetButtonDown("Jump") && IsOnGround)
-        {
-            _rigidbody.AddForce(Vector3.up * 5.0f, ForceMode.VelocityChange);
-        }
 
         Idle_run_ratio = Math.Abs(Velocity / MaxSpeed);
         _animator.SetFloat("idle_run_ratio", Idle_run_ratio);
@@ -93,7 +87,7 @@ public class PlayerController : MonoBehaviour
     private void CheckOnGround()
     {
         RaycastHit hit;
-        if (Physics.Raycast(transform.position + (Vector3.up * 0.2f), Vector3.down, out hit, 0.4f, Layer))
+        if (Physics.Raycast(transform.position + (Vector3.up * 0.2f), Vector3.down, out hit, 0.4f, _layer))
         {
             IsOnGround = true;
         }
@@ -106,6 +100,14 @@ public class PlayerController : MonoBehaviour
         int signOfFriction = MathF.Sign(Velocity) * -1;
         Velocity += Time.deltaTime * _friction * signOfFriction;
         Velocity = Mathf.Abs(Velocity) < 0.05f ? 0.0f : Velocity;
+    }
+
+    public void Jump()
+    {
+        if (IsOnGround)
+        {
+            _rigidbody.AddForce(Vector3.up * 5.0f, ForceMode.VelocityChange);
+        }
     }
 
     public void Move()
@@ -133,6 +135,7 @@ public class PlayerController : MonoBehaviour
         AimDir.z = directionVector.y;
 
         Vector3 forwardVector = new (AimDir.x, 0, 0);
+        if (Mathf.Abs(AimDir.x) <= 0.001f) forwardVector.x = 0.1f;
         forwardVector.Normalize();
         transform.forward = Vector3.Lerp(transform.forward, forwardVector, 0.5f);
         Fire();

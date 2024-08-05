@@ -12,13 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6e345041d0915554e9052f4589fc4cb8, type: 3}
   m_Name: ElectricGunlData
   m_EditorClassIdentifier: 
-  EquipPosition: {x: 0.062, y: -0.032, z: -0.004}
-  EquipRotation: {x: 0.153, y: 89.795, z: 89.79}
+  EquipPosition: {x: 0.2206504, y: -0.02834493, z: 0.1595524}
+  EquipRotation: {x: 0.1528223, y: 89.7949, z: 89.79002}
   Range: 0
   Damage: 3
-  Rate: 0
-  MaxBulletCnt: 0
-  Num: 0
+  Rate: 1
+  MaxBulletCnt: 10
+  Num: 5
   WeaponName: ElectricGun
   WeaponPrefab: {fileID: 8842376448995406601, guid: 71c7a22b614cbb443877d9ba29e9999d,
     type: 3}

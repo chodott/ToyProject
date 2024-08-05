@@ -243,7 +243,7 @@ GameObject:
   - component: {fileID: 5235989050166395983}
   m_Layer: 6
   m_Name: Capsule
-  m_TagString: Player
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1149,7 +1149,7 @@ Animator:
   m_GameObject: {fileID: 840624844957499790}
   m_Enabled: 1
   m_Avatar: {fileID: 9000000, guid: 9f078227c6f09b54392514bfaa25c741, type: 3}
-  m_Controller: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 9c7873c56bacbd34b85e49b195598b36, type: 2}
   m_CullingMode: 1
   m_UpdateMode: 0
   m_ApplyRootMotion: 1
@@ -1178,9 +1178,13 @@ MonoBehaviour:
   _friction: 5
   Velocity: 0
   IsOnGround: 0
-  Layer:
+  _layer:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 1
+  _defaultWeaponPrefab: {fileID: 3823321262691816068, guid: 226c568e48d1bbc45a3110f8660d2e2c,
+    type: 3}
+  _equippedWeapon: {fileID: 4767971611713466054, guid: 226c568e48d1bbc45a3110f8660d2e2c,
+    type: 3}
 --- !u!54 &4355350053825467560
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -5821,7 +5825,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1343331336870299723
 Transform:
   m_ObjectHideFlags: 0
@@ -9048,7 +9052,7 @@ Transform:
   m_GameObject: {fileID: 8438327123068316870}
   serializedVersion: 2
   m_LocalRotation: {x: -0.7071068, y: 0, z: -0, w: 0.7071068}
-  m_LocalPosition: {x: -0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -9659,7 +9663,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &2054494185134362526
 Transform:
   m_ObjectHideFlags: 0

@@ -18,10 +18,10 @@ public class VirtualJoystick : MonoBehaviour, IBeginDragHandler, IDragHandler, I
 
     private Vector2 directionVector;
     private bool isInput;
-    public PlayerController playerController;
+    private PlayerController _playerController;
+    public PlayerController Controller { set { _playerController = value; } }
 
-    //юс╫ц©К
-    //public ItemSpawner itemSpawner;
+
     public enum type
     {
         circle, horizontal
@@ -77,7 +77,7 @@ public class VirtualJoystick : MonoBehaviour, IBeginDragHandler, IDragHandler, I
         {
             if (joystickType == type.horizontal)
             {
-                playerController.Stop();
+                _playerController.Stop();
             }
             
             return;
@@ -85,12 +85,12 @@ public class VirtualJoystick : MonoBehaviour, IBeginDragHandler, IDragHandler, I
 
         if(joystickType == type.horizontal) 
         {
-            playerController.Run(directionVector);
+            _playerController.Run(directionVector);
         }
 
         else
         {
-            playerController.Turn(directionVector);
+            _playerController.Turn(directionVector);
         }
     }
 }

@@ -12,13 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6e345041d0915554e9052f4589fc4cb8, type: 3}
   m_Name: FireGunData
   m_EditorClassIdentifier: 
-  EquipPosition: {x: 0.062, y: -0.032, z: -0.004}
+  EquipPosition: {x: 0.0692, y: -0.036, z: 0.014}
   EquipRotation: {x: 0.153, y: 89.795, z: 89.79}
   Range: 0
-  Damage: 3
-  Rate: 0
-  MaxBulletCnt: 0
-  Num: 0
+  Damage: 1
+  Rate: 1
+  MaxBulletCnt: 10
+  Num: 3
   WeaponName: FireGun
   WeaponPrefab: {fileID: 4982128866425352390, guid: 77c66d64e7d1a8b458934029d50fcbf1,
     type: 3}
