@@ -5,20 +5,31 @@ using UnityEngine;
 public class CheckAbleAttack : Node
 {
     private Transform _transform;
-    private PlayerController _targetPlayer;
+    private Transform _targetTransform;
+
+    public CheckAbleAttack(Transform transform, Transform targetTransform)
+    {
+        _transform = transform;
+        _targetTransform = targetTransform;
+    }
 
     public override NodeState Evaluate()
     {
         RaycastHit hit;
-        Vector3 directionVec = _targetPlayer.transform.position - _transform.position;
+        Vector3 directionVec = _targetTransform.position - _transform.position;
         if(Physics.Raycast(_transform.position, directionVec, out hit))
         {
-            if (hit.transform.GetComponent<PlayerController>() == null) 
+            PlayerController targetPlayer = hit.transform.GetComponent<PlayerController>();
+            if (targetPlayer == null) 
                 return NodeState.Failure;
-            else 
+            else
+            {
+                PlayerController controller = _transform.GetComponent<PlayerController>();
+                controller.Turn(directionVec);
+                controller.Fire();
                 return NodeState.Success;
+            }
 
-            //ÃÑ¾Ë ÄðÅ¸ÀÓµµ ºÁ¾ß´ë
         }
         return NodeState.Failure;
     }

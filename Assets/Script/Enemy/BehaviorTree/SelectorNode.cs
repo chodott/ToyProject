@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class SelectorNode : Node
 {
-
+    public SelectorNode(List<Node> children) : base(children) { }
     public override NodeState Evaluate()
     {
         foreach(Node node in _childrenList)

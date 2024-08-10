@@ -12,7 +12,7 @@ public abstract class BehaviorTree : MonoBehaviour
 
     private void Update()
     {
-        if (_rootNode != null) return;
+        if (_rootNode == null) return;
         _rootNode.Evaluate();
     }
 

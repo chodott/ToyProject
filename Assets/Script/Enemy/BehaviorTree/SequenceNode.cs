@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class SequenceNode : Node
 {
+    public SequenceNode(List<Node> children) : base(children) { }
     public override NodeState Evaluate()
     {
         bool isRunning = false;

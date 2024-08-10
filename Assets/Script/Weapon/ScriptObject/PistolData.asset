@@ -16,7 +16,7 @@ MonoBehaviour:
   EquipRotation: {x: 0.153, y: 89.795, z: 89.79}
   Range: 0
   Damage: 3
-  Rate: 0
+  Rate: 1
   MaxBulletCnt: 30
   Num: 0
   WeaponName: Pistol
