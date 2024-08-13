@@ -10,6 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 307a1eb8ade2e9b40ae3195fd8ac6bbb, type: 3}
-  m_Name: DefaultGirl
+  m_Name: SO_Ninza
   m_EditorClassIdentifier: 
-  Number: 1
+  Thumbnail: {fileID: 0}
+  Number: 18

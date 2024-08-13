@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.UIElements;
 
 public class PlayerController : MonoBehaviour
@@ -37,14 +38,19 @@ public class PlayerController : MonoBehaviour
     private Transform _weaponEquipTransform;
     private Weapon _equippedWeapon;
 
-    private StatManager _statManager;
+    //Status
+    [SerializeField]
+    private const float DamageLimit = 100.0f;
+    private float _receivedDamage = 0.0f;
+   
+    [Serializable]
+    public class floatEvent : UnityEvent<float> { }
+    public floatEvent HitEvent;
     private void Start()
     {
         _rigidbody = GetComponent<Rigidbody>();
-        _rigidbody.freezeRotation = true;
-
-        _statManager = GetComponent<StatManager>(); 
-        _statManager.Die.AddListener(Respawn);
+        _rigidbody.constraints = RigidbodyConstraints.FreezeRotation;
+        _rigidbody.constraints |= RigidbodyConstraints.FreezePositionZ;
 
         _stateContext = new StateContext(this);
 
@@ -127,8 +133,6 @@ public class PlayerController : MonoBehaviour
         _stateContext.Transition(_idleState);
         MoveDir.x = 0;
     }
-
-
     public void Turn(Vector2 directionVector)
     {
         AimDir.x = directionVector.x;
@@ -163,7 +167,7 @@ public class PlayerController : MonoBehaviour
         return null;
     }
 
-    private void Fire()
+    public void Fire()
     {
         if (_equippedWeapon == null) return;
         _equippedWeapon.Shoot();
@@ -186,5 +190,12 @@ public class PlayerController : MonoBehaviour
         _curHead = transform.GetChild(num + _formCount).gameObject;
         _curBody.SetActive(true);
         _curHead.SetActive(true);
+    }
+
+    public void TakeDamage(float damage)
+    {
+        _receivedDamage += damage;
+        if (_receivedDamage > DamageLimit) Respawn();
+        else HitEvent.Invoke(_receivedDamage/DamageLimit);
     }
 }

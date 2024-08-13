@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -46,6 +47,8 @@ public class GameManager : Singleton<GameManager>
     private Dictionary<string, System.Action> sceneChangeActions = new Dictionary<string, System.Action>();
     [SerializeField]
     private GameObject _characterPrefab;
+    [SerializeField]
+    private GameObject _battleSceneUI;
 
     void Start()
     {
@@ -62,11 +65,20 @@ public class GameManager : Singleton<GameManager>
 
     void LoadBattleScene()
     {
-        GameObject character = (GameObject) Instantiate(_characterPrefab, SceneManager.GetActiveScene());
-        character.GetComponent<PlayerController>().ChangeForm(_playerData.CharacterNumber);
-        character.transform.position = new Vector3(-5.0f, 10.0f, 0.0f);
+        GameObject character1 = (GameObject)Instantiate(_characterPrefab, SceneManager.GetActiveScene());
+        PlayerController controller1 = character1.GetComponent<PlayerController>();
+        controller1.ChangeForm(_playerData.CharacterNumber);
+        character1.transform.position = new Vector3(-5.0f, 10.0f, 0.0f);
 
-        FindObjectOfType<ComputerPlayerBT>().Target = character.transform;
+        GameObject character2 = (GameObject)Instantiate(_characterPrefab, SceneManager.GetActiveScene());
+        PlayerController controller2 = character2.GetComponent<PlayerController>();
+        controller2.ChangeForm(_playerData.CharacterNumber);
+        character2.transform.position = new Vector3(5.0f, 10.0f, 0.0f);
+
+        GameObject battleSceneUI = (GameObject)Instantiate(_battleSceneUI, SceneManager.GetActiveScene());
+        battleSceneUI.GetComponent<BattleSceneUI>().SetUI(controller1, controller2);
+
+        //FindObjectOfType<ComputerPlayerBT>().Target = character.transform;
     }
 
     void OnSceneLoad(Scene scene, LoadSceneMode loadSceneMode)

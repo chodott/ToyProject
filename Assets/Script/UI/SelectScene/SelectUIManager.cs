@@ -26,7 +26,7 @@ public class SelectUIManager : MonoBehaviour
     {
         get { return _limitTime; }
     }
-    private float _gap = 120.0f;
+    private float _gap = 60.0f;
 
 
     private static SelectUIManager _selectUIManager;
@@ -51,7 +51,7 @@ public class SelectUIManager : MonoBehaviour
 
             int column = i % _length;
             int row = i / _length;
-            rt.anchoredPosition = new(-_gap + column * _gap, -row * _gap);
+            rt.anchoredPosition = new(-_gap + column * _gap, -row * _gap + Screen.height/4);
         }
     }
 
