@@ -139,16 +139,16 @@ public class PlayerController : MonoBehaviour
         AimDir.z = directionVector.y;
 
         Vector3 forwardVector = new (AimDir.x, 0, 0);
-        if (Mathf.Abs(AimDir.x) <= 0.001f) forwardVector.x = 0.1f;
+        if (Mathf.Abs(AimDir.x) <= 0.01f) forwardVector.x = 0.1f;
         forwardVector.Normalize();
-        transform.forward = Vector3.Lerp(transform.forward, forwardVector, 0.5f);
+        transform.forward = Vector3.Lerp(transform.forward, forwardVector, 1.0f);
         Fire();
         _animator.SetFloat("aim_direction", AimDir.z);
     }
 
     public void EquipWeapon(GameObject weapon)
     {
-        if(_equippedWeapon != null) Destroy(_equippedWeapon);
+        if(_equippedWeapon != null) Destroy(_equippedWeapon.gameObject);
 
         _equippedWeapon = weapon.GetComponent<Weapon>();
         _equippedWeapon.Equipped(_weaponEquipTransform);
@@ -195,6 +195,7 @@ public class PlayerController : MonoBehaviour
     public void TakeDamage(float damage)
     {
         _receivedDamage += damage;
+       // _rigidbody.position = new Vector3(_rigidbody.position.x, _rigidbody.position.y, 0);
         if (_receivedDamage > DamageLimit) Respawn();
         else HitEvent.Invoke(_receivedDamage/DamageLimit);
     }
