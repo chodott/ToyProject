@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Data;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Events;
@@ -25,6 +26,7 @@ public class PlayerController : MonoBehaviour
     private float _friction = 5.0f;
     public float MaxSpeed { get; set; } = 3.0f;
     public float Velocity = 0.0f;
+    private bool _bKnockOut = false;
 
     public bool IsOnGround = false;
     public LayerMask _layer = 1 << 0;     //Default
@@ -40,7 +42,7 @@ public class PlayerController : MonoBehaviour
 
     //Status
     [SerializeField]
-    private const float DamageLimit = 100.0f;
+    private const float DamageLimit = 5.0f;
     private float _receivedDamage = 0.0f;
    
     [Serializable]
@@ -103,6 +105,7 @@ public class PlayerController : MonoBehaviour
 
     public void Decelerate()
     {
+        if (_bKnockOut) return;
         int signOfFriction = MathF.Sign(Velocity) * -1;
         Velocity += Time.deltaTime * _friction * signOfFriction;
         Velocity = Mathf.Abs(Velocity) < 0.05f ? 0.0f : Velocity;
@@ -118,6 +121,7 @@ public class PlayerController : MonoBehaviour
 
     public void Move()
     {
+        if (_bKnockOut) return;
         Vector3 moveVec = Vector3.zero;
         moveVec.x = Velocity;
         GetComponent<Rigidbody>().MovePosition(transform.position +  moveVec * Time.deltaTime);
@@ -173,9 +177,25 @@ public class PlayerController : MonoBehaviour
         _equippedWeapon.Shoot();
     }
 
-    public void Respawn()
+    IEnumerator Respawn()
     {
+        yield return  new WaitForSeconds(2.0f);
+        _rigidbody.constraints = RigidbodyConstraints.FreezeRotation;
+        _rigidbody.constraints |= RigidbodyConstraints.FreezePositionZ;
         transform.position = new Vector3(0, 10.0f, 0);
+        transform.forward = new Vector3(1, 0, 0);
+
+        _stateContext.Transition(_idleState);
+        _rigidbody.velocity = Vector3.zero;
+        _rigidbody.angularVelocity = Vector3.zero;
+        _rigidbody.inertiaTensor = Vector3.one;
+        _rigidbody.inertiaTensorRotation = Quaternion.identity;
+
+        _weaponEquipTransform = ReturnEquipTransform(transform);
+        EquipWeapon(Instantiate(_defaultWeaponPrefab, _weaponEquipTransform));
+
+        _receivedDamage = 0;
+        HitEvent.Invoke(_receivedDamage);
     }
 
     public void ChangeForm(int num)
@@ -195,8 +215,16 @@ public class PlayerController : MonoBehaviour
     public void TakeDamage(float damage)
     {
         _receivedDamage += damage;
-       // _rigidbody.position = new Vector3(_rigidbody.position.x, _rigidbody.position.y, 0);
-        if (_receivedDamage > DamageLimit) Respawn();
-        else HitEvent.Invoke(_receivedDamage/DamageLimit);
+        _receivedDamage = _receivedDamage>=DamageLimit ? DamageLimit : _receivedDamage;
+        HitEvent.Invoke(_receivedDamage / DamageLimit);
+        if (_receivedDamage >= DamageLimit) KnockOut();
+    }
+
+    public void KnockOut()
+    {
+        _rigidbody.constraints = RigidbodyConstraints.None;
+        _bKnockOut = true;
+        _rigidbody.AddForce(Vector3.up * 2000.0f);
+        StartCoroutine(Respawn());
     }
 }

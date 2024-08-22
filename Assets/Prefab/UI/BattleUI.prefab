@@ -589,6 +589,7 @@ MonoBehaviour:
   _verticalJoystick: {fileID: 409019728309752965}
   _jumpButton: {fileID: 6637969255900882468}
   _statusUI: {fileID: 4902716810583394495}
+  _cameraMinDistance: -5
 --- !u!1001 &393976519993558988
 PrefabInstance:
   m_ObjectHideFlags: 0
