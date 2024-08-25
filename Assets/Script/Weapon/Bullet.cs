@@ -13,4 +13,11 @@ public class Bullet : MonoBehaviour
             playerController.TakeDamage(Damage);
         }
     }
+
+    private void FixedUpdate()
+    {
+        Vector3 positionVec = transform.position;
+        positionVec.z = 0f;
+        transform.position = positionVec;
+    }
 }

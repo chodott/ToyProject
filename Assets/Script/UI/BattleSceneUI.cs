@@ -20,7 +20,7 @@ public class BattleSceneUI : MonoBehaviour
     private Camera _mainCamera;
 
     [SerializeField]
-    private float _cameraMinDistance = -5.0f;
+    private float _cameraMinDistance = -8.0f;
     private float _cameraMaxDistance = -10.0f;
 
     public void SetUI(PlayerController playerController1, PlayerController playerController2)
@@ -43,7 +43,7 @@ public class BattleSceneUI : MonoBehaviour
 
         float xPos = (_player1.transform.position.x + _player2.transform.position.x) / 2;
         float zPos = _mainCamera.transform.position.z;
-        float xDistance = -Mathf.Abs(_player1.transform.position.x - _player2.transform.position.x)/2;
+        float xDistance = -Mathf.Abs(_player1.transform.position.x - _player2.transform.position.x);
         float yDistance = -Mathf.Abs(_player1.transform.position.y - _player2.transform.position.y);
         float next_zPos = yDistance < xDistance ? yDistance : xDistance;
         next_zPos = next_zPos < _cameraMinDistance ? next_zPos : _cameraMinDistance;

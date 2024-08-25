@@ -64,6 +64,18 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 9500000, guid: 7a7dec80109275e47a4c56fa3f77a125, type: 3}
+      propertyPath: m_Controller
+      value: 
+      objectReference: {fileID: 9100000, guid: 1b12477e74588434fbb4808ce7c40e8a, type: 2}
+    - target: {fileID: 9500000, guid: 7a7dec80109275e47a4c56fa3f77a125, type: 3}
+      propertyPath: m_UpdateMode
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9500000, guid: 7a7dec80109275e47a4c56fa3f77a125, type: 3}
+      propertyPath: m_ApplyRootMotion
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -103,7 +115,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2b4b462393626d04c91c01c777d57e9b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  weaponData: {fileID: 11400000, guid: d1182df1ee3d08a49b8bdbe3509b084a, type: 2}
+  _weaponData: {fileID: 0}
 --- !u!65 &-4087946655209084224
 BoxCollider:
   m_ObjectHideFlags: 0

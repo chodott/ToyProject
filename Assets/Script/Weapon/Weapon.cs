@@ -30,7 +30,7 @@ public class Weapon : MonoBehaviour
     public void Shoot()
     { 
         if (_isReady == false) return;
-        Vector3 spawnPos = transform.position + transform.forward * 2;
+        Vector3 spawnPos = transform.GetChild(0).transform.position;
         GameObject bullet = Instantiate(Data.ProjectilePrefab, spawnPos, transform.rotation);
         bullet.GetComponent<Bullet>().Damage = Data.Damage;
         if (++_bulletCnt >= Data.MaxBulletCnt) Destroy(gameObject);
