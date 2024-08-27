@@ -9,7 +9,9 @@ public class StatusUI : MonoBehaviour
     [SerializeField]
     private Slider _slider;
     [SerializeField]
-    private TextMeshProUGUI _textMeshPro;
+    private TextMeshProUGUI _statusTmp;
+    [SerializeField]
+    private TextMeshProUGUI _scoreTmp;
     private float _targetDamagePoint = 0.0f;
     private float _curDamagePoint = 0.0f;
     private float _scoreUpTime = 0.0f;
@@ -22,8 +24,13 @@ public class StatusUI : MonoBehaviour
     public void UpdateStatus(float damagePer)
     {
         _targetDamagePoint = damagePer;
-        _textMeshPro.text = ((int)(damagePer * 100)).ToString() + "%";
+        _statusTmp.text = ((int)(damagePer * 100)).ToString() + "%";
         _scoreUpTime = 0.0f;
+    }
+
+    public void UpdateScore(int newScore)
+    {
+        _scoreTmp.text = newScore.ToString();
     }
 
     private void Update()
@@ -32,4 +39,6 @@ public class StatusUI : MonoBehaviour
         _curDamagePoint = Mathf.Lerp(_curDamagePoint, _targetDamagePoint, _scoreUpTime);
         _slider.value = _curDamagePoint;
     }
+
+
 }

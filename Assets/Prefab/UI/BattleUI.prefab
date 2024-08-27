@@ -588,7 +588,8 @@ MonoBehaviour:
   _horizonJoystick: {fileID: 7926230153802267961}
   _verticalJoystick: {fileID: 409019728309752965}
   _jumpButton: {fileID: 6637969255900882468}
-  _statusUI: {fileID: 4902716810583394495}
+  _player1StatusUI: {fileID: 1896694355755937888}
+  _player2StatusUI: {fileID: 4902716810583394495}
   _cameraMinDistance: -5
 --- !u!1001 &393976519993558988
 PrefabInstance:
@@ -728,6 +729,18 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8718943f0fd04fc4888d49a115edb556, type: 3}
+--- !u!114 &1896694355755937888 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2244418762438457260, guid: 8718943f0fd04fc4888d49a115edb556,
+    type: 3}
+  m_PrefabInstance: {fileID: 393976519993558988}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 19c86b30fc2b11d4094242da4a01b83e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &5870351782365534510 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 6052840481710481122, guid: 8718943f0fd04fc4888d49a115edb556,

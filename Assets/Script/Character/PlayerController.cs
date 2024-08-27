@@ -44,10 +44,13 @@ public class PlayerController : MonoBehaviour
     [SerializeField]
     private const float DamageLimit = 5.0f;
     private float _receivedDamage = 0.0f;
-   
-    [Serializable]
-    public class floatEvent : UnityEvent<float> { }
-    public floatEvent HitEvent;
+
+    [SerializeField]
+    private float _respawnTime = 2.0f;
+
+    public UnityEvent<float> HitEvent;
+    public UnityEvent<int> DieEvent;
+    private int _playerNumber = 1;
     private void Start()
     {
         _rigidbody = GetComponent<Rigidbody>();
@@ -177,9 +180,9 @@ public class PlayerController : MonoBehaviour
         _equippedWeapon.Shoot();
     }
 
-    IEnumerator Respawn()
+    public IEnumerator Respawn(Vector3 respawnPos)
     {
-        yield return  new WaitForSeconds(2.0f);
+        yield return  new WaitForSeconds(_respawnTime);
         _rigidbody.constraints = RigidbodyConstraints.FreezeRotation;
         _rigidbody.constraints |= RigidbodyConstraints.FreezePositionZ;
         transform.position = new Vector3(0, 10.0f, 0);
@@ -194,6 +197,7 @@ public class PlayerController : MonoBehaviour
         _weaponEquipTransform = ReturnEquipTransform(transform);
         EquipWeapon(Instantiate(_defaultWeaponPrefab, _weaponEquipTransform));
 
+        _bKnockOut = false;
         _receivedDamage = 0;
         HitEvent.Invoke(_receivedDamage);
     }
@@ -214,6 +218,7 @@ public class PlayerController : MonoBehaviour
 
     public void TakeDamage(float damage)
     {
+        if (_bKnockOut) return;
         _receivedDamage += damage;
         _receivedDamage = _receivedDamage>=DamageLimit ? DamageLimit : _receivedDamage;
         HitEvent.Invoke(_receivedDamage / DamageLimit);
@@ -225,6 +230,7 @@ public class PlayerController : MonoBehaviour
         _rigidbody.constraints = RigidbodyConstraints.None;
         _bKnockOut = true;
         _rigidbody.AddForce(Vector3.up * 2000.0f);
-        StartCoroutine(Respawn());
+        DieEvent.Invoke(_playerNumber);
+        StartCoroutine(Respawn(new Vector3(0,1,0)));
     }
 }
