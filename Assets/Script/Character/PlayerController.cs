@@ -5,11 +5,11 @@ using System.Data;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.Rendering;
 using UnityEngine.UIElements;
 
 public class PlayerController : MonoBehaviour
 {
-    // Start is called before the first frame update
     public float Idle_run_ratio = 0;
 
     public Vector3 AimDir  = Vector3.zero;
@@ -27,6 +27,7 @@ public class PlayerController : MonoBehaviour
     public float MaxSpeed { get; set; } = 3.0f;
     public float Velocity = 0.0f;
     private bool _bKnockOut = false;
+    private bool _bInvincible = false;
 
     public bool IsOnGround = false;
     public LayerMask _layer = 1 << 0;     //Default
@@ -45,8 +46,22 @@ public class PlayerController : MonoBehaviour
     private const float DamageLimit = 5.0f;
     private float _receivedDamage = 0.0f;
 
+
+    private SkinnedMeshRenderer _headMeshRenderer;
+    private SkinnedMeshRenderer _bodyMeshRenderer;
+    static private float _emphaticBlinkIndencity = 0.4f;
+    static private float _defaultBlinkIndencity = 0.2f;
+    private float _targetBlinkIndencity;
+    private bool _bEmphasized = false;
+    private float _blinkTimer = 0.0f;
+    static private float _blinkDuration = 0.3f;
+
+
     [SerializeField]
-    private float _respawnTime = 2.0f;
+    static private float _respawnTime = 2.0f;
+    [SerializeField]
+    static private float _invincibleTime = 2.0f;
+
 
     public UnityEvent<float> HitEvent;
     public UnityEvent<int> DieEvent;
@@ -65,6 +80,9 @@ public class PlayerController : MonoBehaviour
         _animator = GetComponent<Animator>();
         _stateContext.Transition(_idleState);
 
+        _headMeshRenderer = _curHead.GetComponent<SkinnedMeshRenderer>();
+        _bodyMeshRenderer = _curBody.GetComponent<SkinnedMeshRenderer>();
+
         //Search Weapon Equip Object
         _weaponEquipTransform = ReturnEquipTransform(transform);
         EquipWeapon(Instantiate(_defaultWeaponPrefab, _weaponEquipTransform));
@@ -78,6 +96,16 @@ public class PlayerController : MonoBehaviour
         Idle_run_ratio = Math.Abs(Velocity / MaxSpeed);
         _animator.SetFloat("idle_run_ratio", Idle_run_ratio);
         _animator.SetFloat("move_direction", MathF.Sign(transform.forward.x) * MathF.Sign(AimDir.x));
+
+        if(_bInvincible)
+        {
+            _blinkTimer += Time.deltaTime;
+            float lerp = Mathf.Clamp01(_blinkTimer / _blinkDuration);
+            Color emissionColor = Color.white * lerp * _targetBlinkIndencity;
+            _bodyMeshRenderer.material.SetColor("_EmissionColor", emissionColor);
+            _headMeshRenderer.material.SetColor("_EmissionColor", emissionColor);
+        }
+
     }
 
     private void FixedUpdate()
@@ -200,6 +228,32 @@ public class PlayerController : MonoBehaviour
         _bKnockOut = false;
         _receivedDamage = 0;
         HitEvent.Invoke(_receivedDamage);
+        StartCoroutine(Guard());
+    }
+
+    public IEnumerator Guard()
+    {
+        _bInvincible = true;
+
+        _headMeshRenderer.material.EnableKeyword("_EMISSION");
+        _bodyMeshRenderer.material.EnableKeyword("_EMISSION");
+        StartCoroutine(Blink());
+        yield return new WaitForSeconds(_invincibleTime);
+        _bInvincible = false;
+        _headMeshRenderer.material.DisableKeyword("_EMISSION");
+        _bodyMeshRenderer.material.DisableKeyword("_EMISSION");
+    }
+
+    public IEnumerator Blink()
+    {
+        if (!_bInvincible) yield return 0;
+
+        yield return new WaitForSeconds(_blinkDuration);
+        _bEmphasized = !_bEmphasized;
+        _targetBlinkIndencity = _bEmphasized ? _emphaticBlinkIndencity : _defaultBlinkIndencity;
+        _blinkTimer = 0.0f;
+        StartCoroutine(Blink());
+
     }
 
     public void ChangeForm(int num)

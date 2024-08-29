@@ -1182,7 +1182,13 @@ MonoBehaviour:
     m_Bits: 1
   _defaultWeaponPrefab: {fileID: 3823321262691816068, guid: 226c568e48d1bbc45a3110f8660d2e2c,
     type: 3}
+  _headMeshRenderer: {fileID: 0}
+  _respawnTime: 2
+  _invincibleTime: 5
   HitEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  DieEvent:
     m_PersistentCalls:
       m_Calls: []
 --- !u!54 &4355350053825467560
