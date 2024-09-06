@@ -6,12 +6,9 @@ using UnityEngine.UI;
 public class SampleViewUI : MonoBehaviour
 {
     private RawImage _rawImage;
-
-    [SerializeField]
-    private GameObject _sampleCharacterPrefab;
+    private SampleCharacter _sampleCharacter;
     [SerializeField]
     private Vector3 _characterPosition;
-    private GameObject _character;
     private int _characterNumber;
 
     [SerializeField]
@@ -21,12 +18,17 @@ public class SampleViewUI : MonoBehaviour
     private void Start()
     {
         _readyButton.GetComponent<Button>().onClick.AddListener(Ready);
-
         _rawImage = GetComponent<RawImage>();
+        DontDestroyOnLoad(gameObject);
 
-        _character = Instantiate(_sampleCharacterPrefab, _characterPosition, Quaternion.identity);
-        _character.GetComponent<SampleCharacter>().SetRenderTexture(_rawImage);
     }
+
+    public void SetData(SampleCharacter sample)
+    {
+        _sampleCharacter = sample;
+        _sampleCharacter.SetRenderTexture(_rawImage);
+    }
+
     private void Ready()
     {
         _isReady = _isReady ? false : true;
@@ -36,6 +38,6 @@ public class SampleViewUI : MonoBehaviour
     {
         if (_isReady) return;
         _characterNumber = characterNumber;
-        _character.GetComponent<SampleCharacter>().ChangeForm(characterNumber);
+        _sampleCharacter.GetComponent<SampleCharacter>().ChangeForm(characterNumber);
     }
 }

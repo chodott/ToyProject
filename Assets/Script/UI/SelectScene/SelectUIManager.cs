@@ -2,10 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Rendering;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using UnityEngine.UIElements;
-using static UnityEditor.ShaderGraph.Internal.KeywordDependentCollection;
 
 public class SelectUIManager : MonoBehaviour
 {
@@ -15,9 +15,9 @@ public class SelectUIManager : MonoBehaviour
     private GameObject _selectUIPrefab;
 
     [SerializeField]
-    private GameObject _player1View;
+    static private SampleViewUI _player1View;
     [SerializeField]
-    private GameObject _player2View;
+    static private SampleViewUI _player2View;
     [SerializeField]
     private int _length = 3;
     [SerializeField]
@@ -39,20 +39,28 @@ public class SelectUIManager : MonoBehaviour
         }
     }
 
-    private void Start()
+    public void SetData(SampleCharacter sample1, SampleCharacter sample2)
     {
+        _player1View.SetData(sample1);
+        _player2View.SetData(sample2);
+
         for (int i = 0; i < _selectCharacterList.Count; ++i)
         {
             //Create Select Character UI 
             GameObject selectUI = Instantiate(_selectUIPrefab);
             selectUI.transform.SetParent(gameObject.transform, false);
-            selectUI.GetComponent<SelectUI>().SetData(_selectCharacterList[i], _player1View.GetComponent<SampleViewUI>(), _player2View.GetComponent<SampleViewUI>());
+            selectUI.GetComponent<SelectUI>().SetData(_selectCharacterList[i], _player1View, _player2View);
             RectTransform rt = selectUI.GetComponent<RectTransform>();
 
             int column = i % _length;
             int row = i / _length;
-            rt.anchoredPosition = new(-_gap + column * _gap, -row * _gap + Screen.height/4);
+            rt.anchoredPosition = new(-_gap + column * _gap, -row * _gap + Screen.height / 4);
         }
+    }
+
+    private void Start()
+    {
+        
     }
 
     public void CheckReady(int characterNumber)
