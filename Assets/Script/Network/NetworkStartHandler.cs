@@ -17,11 +17,8 @@ public class NetworkStartHandler : MonoBehaviour
     public Button MatchButton;
     void Start()
     {
-        _networkRunner = Instantiate(_networkRunner);
-        _networkRunner.name = "NetworkRunner";
 
         MatchButton.onClick.AddListener(MatchGame);
-
     }
 
     void MatchGame()

@@ -4,5 +4,18 @@
 EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
-  m_Scenes: []
-  m_configObjects: {}
+  m_Scenes:
+  - enabled: 1
+    path: Assets/Scenes/LobbyScene.unity
+    guid: 6b1606e284ffdc54a8312f96189471d2
+  - enabled: 1
+    path: Assets/Scenes/SelectScene.unity
+    guid: c4eddbaff45423b4cb29d762614fe968
+  - enabled: 1
+    path: Assets/Scenes/JungleScene.unity
+    guid: 922e58cdbd31c424c9472c65bad0a9cd
+  m_configObjects:
+    com.unity.adaptiveperformance.loader_settings: {fileID: 11400000, guid: f44c16e6a185cda4b8d817abd1f95fe4,
+      type: 2}
+    com.unity.adaptiveperformance.simulator.provider_settings: {fileID: 11400000,
+      guid: 3de47e68cb1c87d41ba55ac7287f0b76, type: 2}

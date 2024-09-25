@@ -977,6 +977,7 @@ GameObject:
   - component: {fileID: 15779434083238125}
   - component: {fileID: -4943429156574288742}
   - component: {fileID: -8689238368177819007}
+  - component: {fileID: 1245102657850090921}
   m_Layer: 0
   m_Name: SampleCharacter
   m_TagString: Untagged
@@ -1104,7 +1105,25 @@ MonoBehaviour:
   Flags: 262145
   NestedObjects: []
   NetworkedBehaviours:
+  - {fileID: 15779434083238125}
   - {fileID: -4943429156574288742}
+  - {fileID: 1245102657850090921}
+--- !u!114 &1245102657850090921
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 840624844957499790}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 158639473, guid: e725a070cec140c4caffb81624c8c787, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  SyncScale: 0
+  SyncParent: 0
+  _autoAOIOverride: 1
+  DisableSharedModeInterpolation: 0
 --- !u!1 &985776218869982688
 GameObject:
   m_ObjectHideFlags: 0
@@ -5979,7 +5998,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1343331336870299723
 Transform:
   m_ObjectHideFlags: 0

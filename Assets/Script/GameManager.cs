@@ -1,3 +1,4 @@
+using Fusion;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
@@ -49,6 +50,8 @@ public class GameManager : Singleton<GameManager>
     private GameObject _characterPrefab;
     [SerializeField]
     private GameObject _battleSceneUI;
+    private NetworkRunner _networkRunner;
+    public NetworkRunner Runner { get; }
 
     void Start()
     {
@@ -56,11 +59,13 @@ public class GameManager : Singleton<GameManager>
         sceneChangeActions.Add("JungleScene", LoadBattleScene);
 
         SceneManager.sceneLoaded += OnSceneLoad;
+
+        _networkRunner = GetComponent<NetworkRunner>();
     }
 
     void LoadSelectScene()
     {
-
+       
     }
 
     void LoadBattleScene()

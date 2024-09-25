@@ -133,6 +133,7 @@ GameObject:
   - component: {fileID: 3362265435926896356}
   - component: {fileID: 3526863817594161013}
   - component: {fileID: 6771952941631730231}
+  - component: {fileID: 3491236409721301324}
   m_Layer: 5
   m_Name: SampleView
   m_TagString: Untagged
@@ -207,9 +208,26 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 45e0e3711c647ea42b239c92afbde71e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _sampleCharacter: {fileID: 0}
-  _characterPosition: {x: 0, y: 0, z: 0}
+  __sampleCharacter: {fileID: 0}
   _readyButton: {fileID: 20197671766029008}
+--- !u!114 &3491236409721301324
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7020632780451309029}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -1552182283, guid: e725a070cec140c4caffb81624c8c787, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  SortKey: 4120048137
+  ObjectInterest: 1
+  Flags: 262145
+  NestedObjects: []
+  NetworkedBehaviours:
+  - {fileID: 6771952941631730231}
 --- !u!1 &7521650922885146606
 GameObject:
   m_ObjectHideFlags: 0

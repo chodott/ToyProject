@@ -1,3 +1,4 @@
+using Fusion;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -17,7 +18,6 @@ public class SelectUI : MonoBehaviour
         set { _characterData = value; }
     }
     private Image _thumbnail;
-    private SampleCharacter _sampleCharacter;
 
     public UnityEvent<int> CharacterSelected;
 
@@ -29,11 +29,9 @@ public class SelectUI : MonoBehaviour
         _button.onClick.AddListener(SelectCharacter);
     }
 
-    public void SetData(SOSelectCharacter characterData, SampleViewUI player1, SampleViewUI player2)
+    public void SetData(SOSelectCharacter characterData)
     {
         _characterData = characterData;
-        CharacterSelected.AddListener(player1.ChangeCharacter);
-   
     }
 
      void SelectCharacter()

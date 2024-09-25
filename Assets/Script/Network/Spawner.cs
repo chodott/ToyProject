@@ -8,13 +8,14 @@ using UnityEngine;
 
 public class Spawner : MonoBehaviour, INetworkRunnerCallbacks
 {
-    public NetworkPlayer networkPlayer;
-    private NetworkPlayer _player1;
-    private NetworkPlayer _player2;
+    public NetworkObject networkSamplePrefab;
     [SerializeField]
-    private Vector3 _player1SpawnPos;
+    private Vector3 _player1SpawnPos = new Vector3(100.0f,0,0);
     [SerializeField]
-    private Vector3 _player2SpawnPos;
+    private Vector3 _player2SpawnPos = new Vector3(-100.0f, 0, 0);
+
+    private PlayerRef _player1Ref;
+    private PlayerRef _player2Ref;
 
 
     void INetworkRunnerCallbacks.OnConnectedToServer(NetworkRunner runner)
@@ -49,7 +50,7 @@ public class Spawner : MonoBehaviour, INetworkRunnerCallbacks
 
     void INetworkRunnerCallbacks.OnInput(NetworkRunner runner, NetworkInput input)
     {
-
+    
     }
 
     void INetworkRunnerCallbacks.OnInputMissing(NetworkRunner runner, PlayerRef player, NetworkInput input)
@@ -71,20 +72,15 @@ public class Spawner : MonoBehaviour, INetworkRunnerCallbacks
     {
         if (runner.IsSceneAuthority)
         {
-            NetworkPlayer joinedPlayer;
             if (runner.SessionInfo.PlayerCount == 2)
             {
-                joinedPlayer = runner.Spawn(networkPlayer, _player2SpawnPos);
-                _player2 = joinedPlayer;
+                _player2Ref = player;
                 runner.LoadScene(SceneRef.FromIndex(1));
             }
             else
             {
-                joinedPlayer = runner.Spawn(networkPlayer, _player1SpawnPos);
-                _player1 = joinedPlayer;
+                _player1Ref = player;
             }
-
-            joinedPlayer.PlayerNum = runner.SessionInfo.PlayerCount;
         }
     }
 
@@ -100,17 +96,23 @@ public class Spawner : MonoBehaviour, INetworkRunnerCallbacks
 
     void INetworkRunnerCallbacks.OnReliableDataReceived(NetworkRunner runner, PlayerRef player, ReliableKey key, ArraySegment<byte> data)
     {
-
+        
     }
 
     void INetworkRunnerCallbacks.OnSceneLoadDone(NetworkRunner runner)
     {
-        SelectUIManager.UIManager.SetData(_player1.GetComponent<SampleCharacter>(), _player2.GetComponent<SampleCharacter>());
+        if (runner.IsSceneAuthority == false) return;
+        SelectUIManager.UIManager.SetData(_player1Ref, _player2Ref);
     }
 
     void INetworkRunnerCallbacks.OnSceneLoadStart(NetworkRunner runner)
     {
+        if (runner.IsSceneAuthority == false) return;
 
+        var player1Object = runner.Spawn(networkSamplePrefab, _player1SpawnPos);
+        var player2Object = runner.Spawn(networkSamplePrefab, _player2SpawnPos);
+        runner.SetPlayerObject(_player1Ref, player1Object);
+        runner.SetPlayerObject(_player2Ref, player2Object);
     }
 
     void INetworkRunnerCallbacks.OnSessionListUpdated(NetworkRunner runner, List<SessionInfo> sessionList)
@@ -128,15 +130,4 @@ public class Spawner : MonoBehaviour, INetworkRunnerCallbacks
 
     }
 
-    // Start is called before the first frame update
-    void Start()
-    {
-     
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 }
