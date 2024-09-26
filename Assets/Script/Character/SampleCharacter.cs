@@ -20,9 +20,11 @@ public class SampleCharacter : NetworkBehaviour
     {
         _formCount = (transform.childCount-2) / 2;
     }
-    public void ChangeForm(int num)
+
+    [Rpc(RpcSources.All, RpcTargets.StateAuthority)]
+    public void ChangeFormRpc(int num)
     {
-        if (!HasStateAuthority) return;
+        //if (!HasStateAuthority) return;
         if (_isReady) return;
         _formNum = num;
     }
@@ -42,8 +44,6 @@ public class SampleCharacter : NetworkBehaviour
         _curBody.SetActive(true);
         _curHead.SetActive(true);
     }
-
-
 
     public void SetRenderTexture(RawImage rawImage)
     {

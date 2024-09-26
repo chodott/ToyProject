@@ -27,15 +27,8 @@ public class SampleViewUI : NetworkBehaviour
         _isReady = !_isReady;
         if (_isReady == true) SelectUIManager.UIManager.CheckReady(_characterNumber);
     }
-    public void ChangeCharacter(int characterNumber)
-    {
-        if (_isReady) return;
-        _characterNumber = characterNumber;
-        _sampleCharacter.GetComponent<SampleCharacter>().ChangeForm(characterNumber);
-    }
 
-    [Rpc(RpcSources.All, RpcTargets.All)]
-    public void SetCharacterViewRpc(SampleCharacter sample)
+    public void SetCharacterView(SampleCharacter sample)
     {
         _sampleCharacter = sample;
         _sampleCharacter.SetRenderTexture(_rawImage);

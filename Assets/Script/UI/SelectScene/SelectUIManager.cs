@@ -31,7 +31,6 @@ public class SelectUIManager : NetworkBehaviour
     }
     readonly private float _gap = 60.0f;
 
-
     private static SelectUIManager _selectUIManager;
     public static SelectUIManager UIManager
     {
@@ -44,7 +43,6 @@ public class SelectUIManager : NetworkBehaviour
 
     private void Start()
     {
-        
         for (int i = 0; i < _selectCharacterList.Count; ++i)
         {
             //Create Select Character UI 
@@ -60,42 +58,22 @@ public class SelectUIManager : NetworkBehaviour
         }
     }
 
-
-    public void SetData(SampleCharacter sample1, SampleCharacter sample2)
+    [Rpc(RpcSources.StateAuthority, RpcTargets.All)]
+    public void SetDataRpc(PlayerRef player1, PlayerRef player2)
     {
-        _player1View.SetCharacterViewRpc(sample1);
-        _player2View.SetCharacterViewRpc(sample2);
-
-        NetworkRunner runner = NetworkRunner.Instances[0];
-
-        SampleCharacter sample = 
-            runner.GetPlayerObject(runner.LocalPlayer).GetComponent<SampleCharacter>();
-        sample.ChangeForm(10);
-        foreach (var selectUI in _selectUIList)
-        {
-            selectUI.CharacterSelected.AddListener(sample.ChangeForm);
-        }
-
-    }
-
-    public void SetData(PlayerRef player1, PlayerRef player2)
-    {
-        if (!HasStateAuthority) return;
-
         NetworkRunner runner = NetworkRunner.GetRunnerForGameObject(GameManager.Instance.gameObject);
-        _player1View.SetCharacterViewRpc(runner.GetPlayerObject(player1).GetComponent<SampleCharacter>());
-        _player2View.SetCharacterViewRpc(runner.GetPlayerObject(player2).GetComponent<SampleCharacter>());
 
-        SampleCharacter sample  = 
-            runner.GetPlayerObject(runner.LocalPlayer).GetComponent<SampleCharacter>();
+        _player1View.SetCharacterView(runner.GetPlayerObject(player1).GetComponent<SampleCharacter>());
+        _player2View.SetCharacterView(runner.GetPlayerObject(player2).GetComponent<SampleCharacter>());
+
+        SampleCharacter sample =
+        runner.GetPlayerObject(runner.LocalPlayer).GetComponent<SampleCharacter>();
 
         foreach (var selectUI in _selectUIList)
         {
-            selectUI.CharacterSelected.AddListener(sample.ChangeForm);
+            selectUI.CharacterSelected.AddListener(sample.ChangeFormRpc);
         }
-
     }
-
 
     public void CheckReady(int characterNumber)
     {

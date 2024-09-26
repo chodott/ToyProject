@@ -102,17 +102,18 @@ public class Spawner : MonoBehaviour, INetworkRunnerCallbacks
     void INetworkRunnerCallbacks.OnSceneLoadDone(NetworkRunner runner)
     {
         if (runner.IsSceneAuthority == false) return;
-        SelectUIManager.UIManager.SetData(_player1Ref, _player2Ref);
-    }
-
-    void INetworkRunnerCallbacks.OnSceneLoadStart(NetworkRunner runner)
-    {
-        if (runner.IsSceneAuthority == false) return;
-
         var player1Object = runner.Spawn(networkSamplePrefab, _player1SpawnPos);
         var player2Object = runner.Spawn(networkSamplePrefab, _player2SpawnPos);
         runner.SetPlayerObject(_player1Ref, player1Object);
         runner.SetPlayerObject(_player2Ref, player2Object);
+
+        SelectUIManager.UIManager.SetDataRpc(_player1Ref, _player2Ref);
+    }
+
+    void INetworkRunnerCallbacks.OnSceneLoadStart(NetworkRunner runner)
+    {
+
+        
     }
 
     void INetworkRunnerCallbacks.OnSessionListUpdated(NetworkRunner runner, List<SessionInfo> sessionList)
