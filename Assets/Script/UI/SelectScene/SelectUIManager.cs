@@ -16,6 +16,8 @@ public class SelectUIManager : NetworkBehaviour
     [SerializeField]
     private GameObject _selectUIPrefab;
     private List<SelectUI> _selectUIList = new();
+    [SerializeField]
+    private TimerUI _limitTimer;
 
     [SerializeField]
     private SampleViewUI _player1View;
@@ -24,11 +26,8 @@ public class SelectUIManager : NetworkBehaviour
     [SerializeField]
     private int _length = 3;
     [SerializeField]
-    private float _limitTime = 60.0f;
-    public float LimitTime
-    {
-        get { return _limitTime; }
-    }
+    private float _timeLimit = 10.0f;
+    public float LimitTime { get; set; }
     readonly private float _gap = 60.0f;
 
     private static SelectUIManager _selectUIManager;
@@ -56,6 +55,8 @@ public class SelectUIManager : NetworkBehaviour
             int row = i / _length;
             rt.anchoredPosition = new(-_gap + column * _gap, -row * _gap + Screen.height / 4);
         }
+
+        _limitTimer.EndTimerEvent.AddListener(MoveBattleScene);
     }
 
     [Rpc(RpcSources.StateAuthority, RpcTargets.All)]
@@ -73,6 +74,9 @@ public class SelectUIManager : NetworkBehaviour
         {
             selectUI.CharacterSelected.AddListener(sample.ChangeFormRpc);
         }
+
+        _limitTimer.TurnOn(_timeLimit);
+
     }
 
     public void CheckReady(int characterNumber)
@@ -83,16 +87,6 @@ public class SelectUIManager : NetworkBehaviour
 
     public void MoveBattleScene()
     {
-        
         SceneManager.LoadScene("JungleScene");
-    }
-
-    private void Update()
-    {
-        _limitTime -= Time.deltaTime;
-        if(_limitTime < 0 ) 
-        {
-            MoveBattleScene();
-        }
     }
 }

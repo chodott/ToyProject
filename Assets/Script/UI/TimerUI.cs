@@ -1,21 +1,46 @@
+using Fusion;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.UIElements;
 
-public class TimerUI : MonoBehaviour
+public class TimerUI :NetworkBehaviour
 {
     private TextMeshProUGUI _textMeshPro;
-    private int _timeSec;
+    [Networked] public TickTimer LimitTimer { get; set; }
 
-    private void Start()
+    [Networked] public float TimeSec { get; set; }
+    public UnityEvent EndTimerEvent;
+
+    public override void Spawned()
     {
         _textMeshPro = GetComponent<TextMeshProUGUI>();
     }
-    void Update()
+
+    public void TurnOn(float timeLimit)
     {
-        _timeSec = ((int)SelectUIManager.UIManager.LimitTime);
-        _textMeshPro.text = _timeSec.ToString();
+        TimeSec = timeLimit;
+        LimitTimer = TickTimer.CreateFromSeconds(Runner, timeLimit);
+    }
+
+    public override void FixedUpdateNetwork()
+    {
+        if (!HasStateAuthority) return;
+        UpdateTimerRpc();
+
+        if (LimitTimer.Expired(Runner))
+        {
+            EndTimerEvent.Invoke();
+
+            LimitTimer = TickTimer.None;
+        }
+    }
+
+    [Rpc(RpcSources.StateAuthority, RpcTargets.All)]
+    public void UpdateTimerRpc()
+    {
+        _textMeshPro.text = ((int)LimitTimer.RemainingTime(Runner)).ToString();
     }
 }
