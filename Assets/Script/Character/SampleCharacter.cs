@@ -11,7 +11,6 @@ public class SampleCharacter : NetworkBehaviour
     [SerializeField]
     private Camera _selfCamera;
     private int _formCount;
-    private bool _isReady = false;
 
     [Networked, OnChangedRender(nameof(FormChanged))]
     private int _formNum { get; set; }
@@ -25,14 +24,11 @@ public class SampleCharacter : NetworkBehaviour
     public void ChangeFormRpc(int num)
     {
         //if (!HasStateAuthority) return;
-        if (_isReady) return;
         _formNum = num;
     }
 
     public void FormChanged()
     {
-        if (_isReady) return;
-
         if (_curBody != null)
         {
             _curBody.SetActive(false);

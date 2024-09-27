@@ -34,6 +34,11 @@ public class SelectUI : MonoBehaviour
         _characterData = characterData;
     }
 
+    public void TurnOff()
+    {
+        _button.interactable = false;
+    }
+
      void SelectCharacter()
     {
         CharacterSelected.Invoke(_characterData.Number);

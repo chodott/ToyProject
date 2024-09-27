@@ -26,7 +26,7 @@ public class SelectUIManager : NetworkBehaviour
     [SerializeField]
     private int _length = 3;
     [SerializeField]
-    private float _timeLimit = 10.0f;
+    private float _timeLimit = 30.0f;
     public float LimitTime { get; set; }
     readonly private float _gap = 60.0f;
 
@@ -82,7 +82,14 @@ public class SelectUIManager : NetworkBehaviour
     public void CheckReady(int characterNumber)
     {
         GameManager.Instance.Data = new PlayerData(0, characterNumber);
-        MoveBattleScene();
+    }
+
+    public void TurnOffSelectButton()
+    {
+        foreach (var selectUI in _selectUIList)
+        {
+            selectUI.TurnOff();
+        }
     }
 
     public void MoveBattleScene()

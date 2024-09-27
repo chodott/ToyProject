@@ -13,10 +13,11 @@ public class SampleViewUI : NetworkBehaviour
 
     [SerializeField]
     private Button _readyButton;
-    private bool _isReady;
+    [Networked]
+    private bool IsReady { get; set; }
 
 
-    private void Awake()
+    public override void Spawned()
     {
         _readyButton.GetComponent<Button>().onClick.AddListener(Ready);
         _rawImage = GetComponent<RawImage>();
@@ -24,8 +25,20 @@ public class SampleViewUI : NetworkBehaviour
 
     private void Ready()
     {
-        _isReady = !_isReady;
-        if (_isReady == true) SelectUIManager.UIManager.CheckReady(_characterNumber);
+        if (IsReady) return;
+        //Disable SelectButton Only LocalPlayer
+        SelectUIManager.UIManager.TurnOffSelectButton();
+
+        //Disable ReadyButton All Player
+        ReadyRpc();
+    }
+
+    [Rpc(RpcSources.All, RpcTargets.All)]
+    private void ReadyRpc()
+    {
+        IsReady = true;
+        _readyButton.interactable = false;
+        SelectUIManager.UIManager.CheckReady(_characterNumber);
     }
 
     public void SetCharacterView(SampleCharacter sample)
