@@ -1,3 +1,4 @@
+using Fusion;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -8,7 +9,7 @@ using UnityEngine.Events;
 using UnityEngine.Rendering;
 using UnityEngine.UIElements;
 
-public class PlayerController : MonoBehaviour
+public class PlayerController : NetworkBehaviour
 {
     public float Idle_run_ratio = 0;
 
@@ -66,7 +67,7 @@ public class PlayerController : MonoBehaviour
     public UnityEvent<float> HitEvent;
     public UnityEvent<int> DieEvent;
     private int _playerNumber = 1;
-    private void Start()
+    override public  void Spawned()
     {
         _rigidbody = GetComponent<Rigidbody>();
         _rigidbody.constraints = RigidbodyConstraints.FreezeRotation;
@@ -79,9 +80,6 @@ public class PlayerController : MonoBehaviour
 
         _animator = GetComponent<Animator>();
         _stateContext.Transition(_idleState);
-
-        _headMeshRenderer = _curHead.GetComponent<SkinnedMeshRenderer>();
-        _bodyMeshRenderer = _curBody.GetComponent<SkinnedMeshRenderer>();
 
         //Search Weapon Equip Object
         _weaponEquipTransform = ReturnEquipTransform(transform);
@@ -268,6 +266,9 @@ public class PlayerController : MonoBehaviour
         _curHead = transform.GetChild(num + _formCount).gameObject;
         _curBody.SetActive(true);
         _curHead.SetActive(true);
+
+        _headMeshRenderer = _curHead.GetComponent<SkinnedMeshRenderer>();
+        _bodyMeshRenderer = _curBody.GetComponent<SkinnedMeshRenderer>();
     }
 
     public void TakeDamage(float damage)

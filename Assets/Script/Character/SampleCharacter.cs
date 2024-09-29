@@ -13,9 +13,8 @@ public class SampleCharacter : NetworkBehaviour
     private int _formCount;
 
     [Networked, OnChangedRender(nameof(FormChanged))]
-    private int _formNum { get; set; }
-
-    private void Start()
+    public int FormNum { get; set; }
+    override public void Spawned()
     {
         _formCount = (transform.childCount-2) / 2;
     }
@@ -24,7 +23,7 @@ public class SampleCharacter : NetworkBehaviour
     public void ChangeFormRpc(int num)
     {
         //if (!HasStateAuthority) return;
-        _formNum = num;
+        FormNum = num;
     }
 
     public void FormChanged()
@@ -35,8 +34,8 @@ public class SampleCharacter : NetworkBehaviour
             _curHead.SetActive(false);
         }
 
-        _curBody = transform.GetChild(_formNum).gameObject;
-        _curHead = transform.GetChild(_formNum + _formCount).gameObject;
+        _curBody = transform.GetChild(FormNum).gameObject;
+        _curHead = transform.GetChild(FormNum + _formCount).gameObject;
         _curBody.SetActive(true);
         _curHead.SetActive(true);
     }

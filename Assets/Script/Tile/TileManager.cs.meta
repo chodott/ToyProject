@@ -4,9 +4,9 @@ MonoImporter:
   externalObjects: {}
   serializedVersion: 2
   defaultReferences:
-  - boxPrefab: {fileID: 1206191483366010498, guid: 2d3d89369f8f36d47b2db4d8ba1690c3,
+  - _boxPrefab: {fileID: 1206191483366010498, guid: 2d3d89369f8f36d47b2db4d8ba1690c3,
       type: 3}
-  - spawnWeaponTable: {instanceID: 0}
+  - _spawnWeaponTable: {instanceID: 0}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

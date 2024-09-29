@@ -975,8 +975,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   networkSamplePrefab: {fileID: -8689238368177819007, guid: 3162bb59dad73c94bb2010706082ec1b,
     type: 3}
+  networkPlayerPrefab: {fileID: -2644735877669986470, guid: b201b472557267f4799793c723c9df3a,
+    type: 3}
   _player1SpawnPos: {x: -100, y: 0, z: 0}
   _player2SpawnPos: {x: 100, y: 0, z: 0}
+  Player1CharacterType: 0
+  Player2CharacterType: 0
 --- !u!114 &1394760312
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1001,8 +1005,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 008f1854be973094997c32afbaffa8f9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _characterPrefab: {fileID: 840624844957499790, guid: b201b472557267f4799793c723c9df3a,
-    type: 3}
   _battleSceneUI: {fileID: 8849250762241195167, guid: 00f3dd7ec0b6cf149bbb7ebc3c2c0380,
     type: 3}
 --- !u!4 &1394760314

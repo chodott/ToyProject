@@ -1,3 +1,4 @@
+using Fusion;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -5,7 +6,7 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.SceneManagement;
 
-public class BattleSceneUI : MonoBehaviour
+public class BattleUIManager : NetworkBehaviour
 {
     [SerializeField]
     private VirtualJoystick _horizonJoystick;
@@ -30,27 +31,36 @@ public class BattleSceneUI : MonoBehaviour
 
     private int _player1Score = 0;
     private int _player2Score = 0;
-    [SerializeField]
-    private Vector3 _player1SpawnPos = new Vector3(-5.0f, 1.0f, 0.0f);
-    [SerializeField]
-    private Vector3 _player2SpawnPos = new Vector3(5.0f, 1.0f, 0.0f);
 
-
-
-    public void SetUI(PlayerController playerController1, PlayerController playerController2)
+    private static BattleUIManager _battleUIManager;
+    public static BattleUIManager UIManager
     {
-        _horizonJoystick.Controller = playerController1;
-        _verticalJoystick.Controller = playerController1;
-        _jumpButton.Controller = playerController1;
+        get
+        {
+            if (_battleUIManager == null) _battleUIManager = FindObjectOfType<BattleUIManager>();
+            return _battleUIManager;
+        }
+    }
 
-        playerController1.HitEvent.AddListener(_player1StatusUI.UpdateStatus);
-        playerController2.HitEvent.AddListener(_player2StatusUI.UpdateStatus);
+    [Rpc(RpcSources.StateAuthority, RpcTargets.All)]
+    public void SetDataRpc(NetworkObject player1, NetworkObject player2, int p1Type, int p2Type)
+    {
+        var playerController = Runner.GetPlayerObject(Runner.LocalPlayer).GetComponent<PlayerController>();
+        _horizonJoystick.Controller = playerController;
+        _verticalJoystick.Controller = playerController;
+        _jumpButton.Controller = playerController;
 
-        _player1 = playerController1;
-        _player2 = playerController2;
+        playerController.HitEvent.AddListener(_player1StatusUI.UpdateStatus);
+        playerController.HitEvent.AddListener(_player2StatusUI.UpdateStatus);
+
+        _player1 = player1.GetComponent<PlayerController>();
+        _player2 = player2.GetComponent<PlayerController>();
         _player1.DieEvent.AddListener(SetScore);
         _player2.DieEvent.AddListener(SetScore);
         _mainCamera = Camera.main;
+
+        _player1.ChangeForm(p1Type);
+        _player2.ChangeForm(p2Type);
     }
 
     private void SetScore(int playerNumber)

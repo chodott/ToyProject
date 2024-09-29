@@ -71,26 +71,26 @@ public class VirtualJoystick : MonoBehaviour, IBeginDragHandler, IDragHandler, I
         isInput = true;
     }
 
-    void Update()
-    {
-        if (!isInput)
-        {
-            if (joystickType == type.horizontal)
-            {
-                _playerController.Stop();
-            }
+    //void Update()
+    //{
+    //    if (!isInput)
+    //    {
+    //        if (joystickType == type.horizontal)
+    //        {
+    //            _playerController.Stop();
+    //        }
             
-            return;
-        }
+    //        return;
+    //    }
 
-        if(joystickType == type.horizontal) 
-        {
-            _playerController.Run(directionVector);
-        }
+    //    if(joystickType == type.horizontal) 
+    //    {
+    //        _playerController.Run(directionVector);
+    //    }
 
-        else
-        {
-            _playerController.Turn(directionVector);
-        }
-    }
+    //    else
+    //    {
+    //        _playerController.Turn(directionVector);
+    //    }
+    //}
 }

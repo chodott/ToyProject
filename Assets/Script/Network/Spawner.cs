@@ -5,10 +5,12 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
-public class Spawner : MonoBehaviour, INetworkRunnerCallbacks
+public class Spawner : Singleton<Spawner>, INetworkRunnerCallbacks
 {
     public NetworkObject networkSamplePrefab;
+    public NetworkObject networkPlayerPrefab;
     [SerializeField]
     private Vector3 _player1SpawnPos = new Vector3(100.0f,0,0);
     [SerializeField]
@@ -16,6 +18,9 @@ public class Spawner : MonoBehaviour, INetworkRunnerCallbacks
 
     private PlayerRef _player1Ref;
     private PlayerRef _player2Ref;
+
+    public int Player1CharacterType;
+    public int Player2CharacterType;
 
 
     void INetworkRunnerCallbacks.OnConnectedToServer(NetworkRunner runner)
@@ -102,18 +107,48 @@ public class Spawner : MonoBehaviour, INetworkRunnerCallbacks
     void INetworkRunnerCallbacks.OnSceneLoadDone(NetworkRunner runner)
     {
         if (runner.IsSceneAuthority == false) return;
-        var player1Object = runner.Spawn(networkSamplePrefab, _player1SpawnPos);
-        var player2Object = runner.Spawn(networkSamplePrefab, _player2SpawnPos);
-        runner.SetPlayerObject(_player1Ref, player1Object);
-        runner.SetPlayerObject(_player2Ref, player2Object);
+        switch (SceneManager.GetActiveScene().buildIndex)
+        {
+            case 1:
+                {
+                    var player1Object = runner.Spawn(networkSamplePrefab, _player1SpawnPos);
+                    var player2Object = runner.Spawn(networkSamplePrefab, _player2SpawnPos);
+                    runner.SetPlayerObject(_player1Ref, player1Object);
+                    runner.SetPlayerObject(_player2Ref, player2Object);
 
-        SelectUIManager.UIManager.SetDataRpc(_player1Ref, _player2Ref);
+                    SelectUIManager.UIManager.SetDataRpc(player1Object, player2Object);
+                    break;
+
+                }
+
+            default:
+                {
+                    runner.UnloadScene("SelectScene");
+
+                    Player1CharacterType = runner.GetPlayerObject(_player1Ref).GetComponent<SampleCharacter>().FormNum;
+                    Player2CharacterType = runner.GetPlayerObject(_player2Ref).GetComponent<SampleCharacter>().FormNum;
+
+                    Destroy(runner.GetPlayerObject(_player1Ref));
+                    Destroy(runner.GetPlayerObject(_player2Ref));
+
+                    var player1Object = runner.Spawn(networkPlayerPrefab, _player1SpawnPos);
+                    var player2Object = runner.Spawn(networkPlayerPrefab, _player2SpawnPos);
+                    runner.SetPlayerObject(_player1Ref, player1Object);
+                    runner.SetPlayerObject(_player2Ref, player2Object);
+
+                    BattleUIManager.UIManager.SetDataRpc(player1Object, player2Object, 
+                        Player1CharacterType, Player2CharacterType);
+                    break;
+                }
+        }
+       
+
     }
 
     void INetworkRunnerCallbacks.OnSceneLoadStart(NetworkRunner runner)
     {
 
-        
+
     }
 
     void INetworkRunnerCallbacks.OnSessionListUpdated(NetworkRunner runner, List<SessionInfo> sessionList)
