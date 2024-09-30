@@ -12,9 +12,9 @@ public class Spawner : Singleton<Spawner>, INetworkRunnerCallbacks
     public NetworkObject networkSamplePrefab;
     public NetworkObject networkPlayerPrefab;
     [SerializeField]
-    private Vector3 _player1SpawnPos = new Vector3(100.0f,0,0);
+    private Vector3 _player1SpawnPos = new Vector3(5.0f,0,0);
     [SerializeField]
-    private Vector3 _player2SpawnPos = new Vector3(-100.0f, 0, 0);
+    private Vector3 _player2SpawnPos = new Vector3(-5.0f, 0, 0);
 
     private PlayerRef _player1Ref;
     private PlayerRef _player2Ref;
@@ -125,14 +125,18 @@ public class Spawner : Singleton<Spawner>, INetworkRunnerCallbacks
                 {
                     runner.UnloadScene("SelectScene");
 
-                    Player1CharacterType = runner.GetPlayerObject(_player1Ref).GetComponent<SampleCharacter>().FormNum;
-                    Player2CharacterType = runner.GetPlayerObject(_player2Ref).GetComponent<SampleCharacter>().FormNum;
+                    var player1Object = runner.GetPlayerObject(_player1Ref);
+                    var player2Object = runner.GetPlayerObject(_player2Ref);
 
-                    Destroy(runner.GetPlayerObject(_player1Ref));
-                    Destroy(runner.GetPlayerObject(_player2Ref));
+                    Player1CharacterType = player1Object.GetComponent<SampleCharacter>().FormNum;
+                    Player2CharacterType = player2Object.GetComponent<SampleCharacter>().FormNum;
 
-                    var player1Object = runner.Spawn(networkPlayerPrefab, _player1SpawnPos);
-                    var player2Object = runner.Spawn(networkPlayerPrefab, _player2SpawnPos);
+                    runner.Despawn(player1Object);
+                    runner.Despawn(player2Object);
+
+
+                    player1Object = runner.Spawn(networkPlayerPrefab, _player1SpawnPos);
+                    player2Object = runner.Spawn(networkPlayerPrefab, _player2SpawnPos);
                     runner.SetPlayerObject(_player1Ref, player1Object);
                     runner.SetPlayerObject(_player2Ref, player2Object);
 

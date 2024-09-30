@@ -977,8 +977,8 @@ MonoBehaviour:
     type: 3}
   networkPlayerPrefab: {fileID: -2644735877669986470, guid: b201b472557267f4799793c723c9df3a,
     type: 3}
-  _player1SpawnPos: {x: -100, y: 0, z: 0}
-  _player2SpawnPos: {x: 100, y: 0, z: 0}
+  _player1SpawnPos: {x: -5, y: 2, z: 0}
+  _player2SpawnPos: {x: 5, y: 2, z: 0}
   Player1CharacterType: 0
   Player2CharacterType: 0
 --- !u!114 &1394760312
