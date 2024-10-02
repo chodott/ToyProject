@@ -61,6 +61,7 @@ public class BattleUIManager : NetworkBehaviour
 
         _player1.ChangeForm(p1Type);
         _player2.ChangeForm(p2Type);
+
     }
 
     private void SetScore(int playerNumber)

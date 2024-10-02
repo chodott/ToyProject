@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Net;
 using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.EventSystems;
 using UnityEngine.UIElements;
+using UnityEngine.EventSystems;
 
-public class VirtualJoystick : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
+public class VirtualJoystick : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDragHandler
 {
     private RectTransform lever;
     private RectTransform rectTransform;
@@ -26,11 +26,35 @@ public class VirtualJoystick : MonoBehaviour, IBeginDragHandler, IDragHandler, I
     {
         circle, horizontal
     }
-
+    
     private void Awake()
     {
         rectTransform = GetComponent<RectTransform>();
         lever = transform.GetChild(0).GetComponent<RectTransform>();
+        
+    }
+
+    void Update()
+    {
+        if (!isInput)
+        {
+            if (joystickType == type.horizontal)
+            {
+                _playerController.Stop();
+            }
+
+            return;
+        }
+
+        if (joystickType == type.horizontal)
+        {
+            _playerController.Run(directionVector);
+        }
+
+        else
+        {
+            _playerController.Turn(directionVector);
+        }
     }
 
     public void OnBeginDrag(PointerEventData eventData)
@@ -70,27 +94,4 @@ public class VirtualJoystick : MonoBehaviour, IBeginDragHandler, IDragHandler, I
         directionVector.Normalize();
         isInput = true;
     }
-
-    //void Update()
-    //{
-    //    if (!isInput)
-    //    {
-    //        if (joystickType == type.horizontal)
-    //        {
-    //            _playerController.Stop();
-    //        }
-            
-    //        return;
-    //    }
-
-    //    if(joystickType == type.horizontal) 
-    //    {
-    //        _playerController.Run(directionVector);
-    //    }
-
-    //    else
-    //    {
-    //        _playerController.Turn(directionVector);
-    //    }
-    //}
 }

@@ -1,4 +1,5 @@
 using Fusion;
+using Fusion.Addons.Physics;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -13,9 +14,11 @@ public class PlayerController : NetworkBehaviour
 {
     public float Idle_run_ratio = 0;
 
-    public Vector3 AimDir  = Vector3.zero;
+    [Networked, OnChangedRender(nameof(ChangedAim))]
+    public Vector3 AimDir { get; set; }
     public Vector3 MoveDir = Vector3.zero;
     private Rigidbody _rigidbody;
+    private NetworkRigidbody3D _networkRigidbody;
     private Animator _animator;
 
     //Form
@@ -69,9 +72,16 @@ public class PlayerController : NetworkBehaviour
     private int _playerNumber = 1;
     override public  void Spawned()
     {
+
         _rigidbody = GetComponent<Rigidbody>();
         _rigidbody.constraints = RigidbodyConstraints.FreezeRotation;
         _rigidbody.constraints |= RigidbodyConstraints.FreezePositionZ;
+
+        //NetworkRigidbody
+        _networkRigidbody = GetComponent<NetworkRigidbody3D>();
+        _networkRigidbody.Rigidbody.constraints = RigidbodyConstraints.FreezeRotation;
+        _networkRigidbody.Rigidbody.constraints |= RigidbodyConstraints.FreezePositionZ;
+
 
         _stateContext = new StateContext(this);
 
@@ -86,29 +96,9 @@ public class PlayerController : NetworkBehaviour
         EquipWeapon(Instantiate(_defaultWeaponPrefab, _weaponEquipTransform));
     }
 
-    public void Update()
+    public override void FixedUpdateNetwork()
     {
-        AimDir.Normalize();
-        MoveDir.Normalize();
-
-        Idle_run_ratio = Math.Abs(Velocity / MaxSpeed);
-        _animator.SetFloat("idle_run_ratio", Idle_run_ratio);
-        _animator.SetFloat("move_direction", MathF.Sign(transform.forward.x) * MathF.Sign(AimDir.x));
-
-        if(_bInvincible)
-        {
-            _blinkTimer += Time.deltaTime;
-            float lerp = Mathf.Clamp01(_blinkTimer / _blinkDuration);
-            Color emissionColor = Color.white * lerp * _targetBlinkIndencity;
-            _bodyMeshRenderer.material.SetColor("_EmissionColor", emissionColor);
-            _headMeshRenderer.material.SetColor("_EmissionColor", emissionColor);
-        }
-
-    }
-
-    private void FixedUpdate()
-    {
-        if(MoveDir != Vector3.zero)
+        if (MoveDir != Vector3.zero)
         {
             _stateContext.Transition(_moveState);
         }
@@ -119,7 +109,29 @@ public class PlayerController : NetworkBehaviour
         }
         CheckOnGround();
         _stateContext.Update();
+
+        AimDir.Normalize();
+        MoveDir.Normalize();
+
+        Idle_run_ratio = Math.Abs(Velocity / MaxSpeed);
+        _animator.SetFloat("idle_run_ratio", Idle_run_ratio);
+        _animator.SetFloat("move_direction", MathF.Sign(transform.forward.x) * MathF.Sign(AimDir.x));
+
+        if (_bInvincible)
+        {
+            _blinkTimer += Time.deltaTime;
+            float lerp = Mathf.Clamp01(_blinkTimer / _blinkDuration);
+            Color emissionColor = Color.white * lerp * _targetBlinkIndencity;
+            _bodyMeshRenderer.material.SetColor("_EmissionColor", emissionColor);
+            _headMeshRenderer.material.SetColor("_EmissionColor", emissionColor);
+        }
+
+        Vector3 forwardVector = new (AimDir.x, 0, 0);
+        if (Mathf.Abs(AimDir.x) <= 0.01f) forwardVector.x = 0.1f;
+        forwardVector.Normalize();
+        transform.forward = Vector3.Lerp(transform.forward, forwardVector, 1.0f);
     }
+
 
     private void CheckOnGround()
     {
@@ -145,6 +157,8 @@ public class PlayerController : NetworkBehaviour
         if (IsOnGround)
         {
             _rigidbody.AddForce(Vector3.up * 5.0f, ForceMode.VelocityChange);
+            //NetworkRigidbody
+            _networkRigidbody.Rigidbody.AddForce(Vector3.up * 5.0f, ForceMode.VelocityChange);
         }
     }
 
@@ -153,7 +167,9 @@ public class PlayerController : NetworkBehaviour
         if (_bKnockOut) return;
         Vector3 moveVec = Vector3.zero;
         moveVec.x = Velocity;
-        GetComponent<Rigidbody>().MovePosition(transform.position +  moveVec * Time.deltaTime);
+        _rigidbody.MovePosition(transform.position +  moveVec * Time.deltaTime);
+        //NetworkRigidbody
+        _networkRigidbody.Rigidbody.MovePosition(transform.position + moveVec * Time.deltaTime);
     }
 
     public void Run(Vector2 directionVector)
@@ -168,14 +184,12 @@ public class PlayerController : NetworkBehaviour
     }
     public void Turn(Vector2 directionVector)
     {
-        AimDir.x = directionVector.x;
-        AimDir.z = directionVector.y;
-
-        Vector3 forwardVector = new (AimDir.x, 0, 0);
-        if (Mathf.Abs(AimDir.x) <= 0.01f) forwardVector.x = 0.1f;
-        forwardVector.Normalize();
-        transform.forward = Vector3.Lerp(transform.forward, forwardVector, 1.0f);
+        AimDir = new Vector3(directionVector.x, 0.0f, directionVector.y);
         Fire();
+    }
+
+    public void ChangedAim()
+    {
         _animator.SetFloat("aim_direction", AimDir.z);
     }
 
