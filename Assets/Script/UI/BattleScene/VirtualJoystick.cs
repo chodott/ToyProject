@@ -18,6 +18,7 @@ public class VirtualJoystick : MonoBehaviour, IBeginDragHandler, IEndDragHandler
 
     private Vector2 directionVector;
     private bool isInput;
+    [SerializeField]
     private PlayerController _playerController;
     public PlayerController Controller { set { _playerController = value; } }
 
@@ -33,9 +34,10 @@ public class VirtualJoystick : MonoBehaviour, IBeginDragHandler, IEndDragHandler
         lever = transform.GetChild(0).GetComponent<RectTransform>();
         
     }
-
-    void Update()
+    private void Update()
     {
+        if (_playerController == null) return;
+
         if (!isInput)
         {
             if (joystickType == type.horizontal)

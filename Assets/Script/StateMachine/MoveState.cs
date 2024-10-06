@@ -13,7 +13,7 @@ public class MoveState : IPlayableState
         if (_playerController == null) _playerController = playerController;
     }
 
-    public void Update()
+    public void Update(float deltaTime)
     {
         if (_playerController == null) return;
 
@@ -21,7 +21,7 @@ public class MoveState : IPlayableState
 
         _playerController.Decelerate();
 
-        _playerController.Velocity += _playerController.MoveDir.x * _accel * Time.deltaTime;
+        _playerController.Velocity += _playerController.MoveDir.x * _accel * deltaTime;
         _playerController.Velocity = MathF.Abs(_playerController.Velocity) > _playerController.MaxSpeed ?
             _playerController.MaxSpeed * _playerController.MoveDir.x : _playerController.Velocity;
 

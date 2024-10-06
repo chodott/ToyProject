@@ -16,13 +16,13 @@ public class SampleCharacter : NetworkBehaviour
     public int FormNum { get; set; }
     override public void Spawned()
     {
+        DontDestroyOnLoad(this);
         _formCount = (transform.childCount-2) / 2;
     }
 
     [Rpc(RpcSources.All, RpcTargets.StateAuthority)]
     public void ChangeFormRpc(int num)
     {
-        //if (!HasStateAuthority) return;
         FormNum = num;
     }
 

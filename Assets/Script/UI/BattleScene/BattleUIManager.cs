@@ -88,8 +88,10 @@ public class BattleUIManager : NetworkBehaviour
         SceneManager.LoadScene(0);
     }
 
-    private void Update()
+
+    public override void FixedUpdateNetwork()
     {
+
         if (_mainCamera == null) return;
 
         float xPos = (_player1.transform.position.x + _player2.transform.position.x) / 2;
@@ -102,5 +104,24 @@ public class BattleUIManager : NetworkBehaviour
         zPos = Mathf.Lerp(zPos, next_zPos, Time.deltaTime);
         Vector3 cameraPosition = new Vector3(xPos, _mainCamera.transform.position.y, zPos);
         _mainCamera.transform.position = cameraPosition;
+
     }
+
+
+//    private void Update()
+//    {
+//        if (_mainCamera == null) return;
+
+//        float xPos = (_player1.transform.position.x + _player2.transform.position.x) / 2;
+//        float zPos = _mainCamera.transform.position.z;
+//        float xDistance = -Mathf.Abs(_player1.transform.position.x - _player2.transform.position.x);
+//        float yDistance = -Mathf.Abs(_player1.transform.position.y - _player2.transform.position.y);
+//        float next_zPos = yDistance < xDistance ? yDistance : xDistance;
+//        next_zPos = next_zPos < _cameraMinDistance ? next_zPos : _cameraMinDistance;
+//        next_zPos = next_zPos < _cameraMaxDistance ? _cameraMaxDistance : next_zPos;
+//        zPos = Mathf.Lerp(zPos, next_zPos, Time.deltaTime);
+//        Vector3 cameraPosition = new Vector3(xPos, _mainCamera.transform.position.y, zPos);
+//        _mainCamera.transform.position = cameraPosition;
+//    }
+
 }

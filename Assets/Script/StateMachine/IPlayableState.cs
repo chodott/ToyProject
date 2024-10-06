@@ -5,5 +5,5 @@ using UnityEngine;
 public interface IPlayableState
 {
     void Handle(PlayerController playerController);
-    void Update();
+    void Update(float deltaTime);
 }

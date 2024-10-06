@@ -11,7 +11,7 @@ public class IdleState : IPlayableState
         if (_playerController == null) _playerController = playerController;
     }
 
-    public void Update()
+    public void Update(float deltaTime)
     {
         if (_playerController == null) return;
 

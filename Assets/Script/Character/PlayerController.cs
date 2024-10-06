@@ -70,8 +70,9 @@ public class PlayerController : NetworkBehaviour
     public UnityEvent<float> HitEvent;
     public UnityEvent<int> DieEvent;
     private int _playerNumber = 1;
-    override public  void Spawned()
+    public override void Spawned()
     {
+        Runner.SetIsSimulated(Runner.GetPlayerObject(Runner.LocalPlayer), true);
 
         _rigidbody = GetComponent<Rigidbody>();
         _rigidbody.constraints = RigidbodyConstraints.FreezeRotation;
@@ -98,6 +99,8 @@ public class PlayerController : NetworkBehaviour
 
     public override void FixedUpdateNetwork()
     {
+        if (HasStateAuthority == false) return;
+
         if (MoveDir != Vector3.zero)
         {
             _stateContext.Transition(_moveState);
@@ -108,7 +111,7 @@ public class PlayerController : NetworkBehaviour
             _stateContext.Transition(_idleState);
         }
         CheckOnGround();
-        _stateContext.Update();
+        _stateContext.Update(Runner.DeltaTime);
 
         AimDir.Normalize();
         MoveDir.Normalize();
@@ -148,7 +151,7 @@ public class PlayerController : NetworkBehaviour
     {
         if (_bKnockOut) return;
         int signOfFriction = MathF.Sign(Velocity) * -1;
-        Velocity += Time.deltaTime * _friction * signOfFriction;
+        Velocity += Runner.DeltaTime * _friction * signOfFriction;
         Velocity = Mathf.Abs(Velocity) < 0.05f ? 0.0f : Velocity;
     }
 
@@ -156,7 +159,6 @@ public class PlayerController : NetworkBehaviour
     {
         if (IsOnGround)
         {
-            _rigidbody.AddForce(Vector3.up * 5.0f, ForceMode.VelocityChange);
             //NetworkRigidbody
             _networkRigidbody.Rigidbody.AddForce(Vector3.up * 5.0f, ForceMode.VelocityChange);
         }
@@ -167,9 +169,9 @@ public class PlayerController : NetworkBehaviour
         if (_bKnockOut) return;
         Vector3 moveVec = Vector3.zero;
         moveVec.x = Velocity;
-        _rigidbody.MovePosition(transform.position +  moveVec * Time.deltaTime);
+
         //NetworkRigidbody
-        _networkRigidbody.Rigidbody.MovePosition(transform.position + moveVec * Time.deltaTime);
+        _networkRigidbody.Rigidbody.MovePosition(transform.position + moveVec * Runner.DeltaTime);
     }
 
     public void Run(Vector2 directionVector)

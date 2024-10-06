@@ -26,8 +26,8 @@ public class StateContext
         CurrentState.Handle(_playerController);
     }
 
-    public void Update()
+    public void Update(float deltaTime)
     {
-        CurrentState.Update();
+        CurrentState.Update(deltaTime);
     }
 }
